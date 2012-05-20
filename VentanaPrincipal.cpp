@@ -22,8 +22,8 @@ VentanaPrincipal::VentanaPrincipal()
     //resto de botones
 
     //Tamaño botones
-    nuevo->setMaximumWidth(80);
-    cerrar->setMaximumWidth(80);
+    nuevo->setMaximumWidth(100);
+    cerrar->setMaximumWidth(100);
 
     //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
@@ -110,6 +110,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
     //Cosas comunes
     fichas[fila][columna]->setAlignment(Qt::AlignCenter);
     fichas[fila][columna]->setButtonSymbols(QSpinBox::NoButtons);
+    fichas[fila][columna]->setMinimumSize(60,60);
 
     //Comprobar el valor en el modelo
     if(1)/*Aqui hay que comprobar el valor */
