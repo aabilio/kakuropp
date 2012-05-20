@@ -18,7 +18,7 @@ VentanaPrincipal::VentanaPrincipal()
 
     //Botones
     nuevo = new QPushButton("Nuevo Juego");
-    cerrar = new QPushButton("Cerrar");
+    cerrar = new QPushButton("Agus");
     //resto de botones
 
     //Tamaño botones
