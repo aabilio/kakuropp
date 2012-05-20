@@ -9,7 +9,7 @@ int main (int argc, char *argv[])
 
     VentanaPrincipal ventana;
 
-    ventana.show();
+    //ventana.show();
 
     return app.exec();
 }
