@@ -9,12 +9,15 @@ VentanaPrincipal::VentanaPrincipal()
     QPushButton *nuevo;
     //Otros botones
     QPushButton *cerrar;
+    QSpacerItem *espacioVertical;
+
 
     //Instanciacion de objetos
     principal = new QWidget(this);
     layoutPrincipal = new QHBoxLayout(principal);
     botonera =new QVBoxLayout();
     grid = new QGridLayout();
+    espacioVertical = new QSpacerItem(20,100,QSizePolicy::Minimum,QSizePolicy::Expanding);
 
     //Botones
     nuevo = new QPushButton("Nuevo Juego");
@@ -34,6 +37,8 @@ VentanaPrincipal::VentanaPrincipal()
     //Insertar botones
     botonera->addWidget(nuevo);
     botonera->addWidget(cerrar);
+    botonera->addItem(espacioVertical);
+
 
     //Insertar botonera
     layoutPrincipal->addLayout(botonera);
@@ -108,6 +113,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
     QFont bloqueadas("Arial",24,QFont::Bold);
 
     //Cosas comunes
+    fichas[fila][columna]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     fichas[fila][columna]->setAlignment(Qt::AlignCenter);
     fichas[fila][columna]->setButtonSymbols(QSpinBox::NoButtons);
     fichas[fila][columna]->setMinimumSize(60,60);
