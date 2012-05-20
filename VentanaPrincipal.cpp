@@ -117,6 +117,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         fichas[fila][columna]->setRange(0,9);
         fichas[fila][columna]->setStyleSheet("background-color: rgb(211, 211, 211);");
         fichas[fila][columna]->setFont(noBloqueadas);
+        fichas[fila][columna]->clear();
     }else
     {
         fichas[fila][columna]->setRange(0,50);
