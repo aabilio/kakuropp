@@ -10,6 +10,7 @@ VentanaPrincipal::VentanaPrincipal()
     //Otros botones
     QPushButton *cerrar;
     QSpacerItem *espacioVertical;
+    QSpacerItem *espacioHorizontal;
 
 
     //Instanciacion de objetos
@@ -18,30 +19,41 @@ VentanaPrincipal::VentanaPrincipal()
     botonera =new QVBoxLayout();
     grid = new QGridLayout();
     espacioVertical = new QSpacerItem(20,100,QSizePolicy::Minimum,QSizePolicy::Expanding);
-
+    espacioHorizontal = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
     //Botones
     nuevo = new QPushButton("Nuevo Juego");
-    cerrar = new QPushButton("Cerrar"); //
+    cerrar = new QPushButton("Cerrar");
+    pause = new QPushButton("Pause");
+    continuar = new QPushButton("Continuar");
     //resto de botones
 
     //Tamaño botones
     nuevo->setMaximumWidth(100);
     cerrar->setMaximumWidth(100);
+    pause->setMaximumWidth(100);
+    continuar->setMaximumWidth(100);
 
     //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
     QObject::connect(nuevo,SIGNAL(clicked()),this,SLOT(NuevoJuego()));
-
-
+    //Botones pausa y continuar aparecen y desaparecen
+    QObject::connect(pause,SIGNAL(clicked()),continuar,SLOT(show()));
+    QObject::connect(pause,SIGNAL(clicked()),pause,SLOT(hide()));
+    QObject::connect(continuar,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(continuar,SIGNAL(clicked()),continuar,SLOT(hide()));
     //Ordenar layout y botones
     //Insertar botones
     botonera->addWidget(nuevo);
     botonera->addWidget(cerrar);
     botonera->addItem(espacioVertical);
+    botonera->addWidget(pause);
+    botonera->addWidget(continuar);
+    continuar->hide();
 
 
     //Insertar botonera
     layoutPrincipal->addLayout(botonera);
+    layoutPrincipal->addItem(espacioHorizontal);
 
     //Insertar Grid
     layoutPrincipal->addLayout(grid);
@@ -103,6 +115,9 @@ void VentanaPrincipal::ColocarFichas()
             grid->addWidget(fichas[fila][columna],fila,columna);
             QObject::connect(fichas[fila][columna],SIGNAL(valueChanged(int)),fichas[fila][columna],SLOT(recibir_valor(int)));
             QObject::connect(fichas[fila][columna],SIGNAL(completar_senal(int,int,int)),this,SLOT(CambiarValor(int,int,int)));
+            //Conexiones para pausar y continuar
+            QObject::connect(pause,SIGNAL(clicked()),fichas[fila][columna],SLOT(hide()));
+            QObject::connect(continuar,SIGNAL(clicked()),fichas[fila][columna],SLOT(show()));
         }
 }
 
