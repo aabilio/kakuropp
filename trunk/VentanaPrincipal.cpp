@@ -20,6 +20,7 @@ VentanaPrincipal::VentanaPrincipal()
     grid = new QGridLayout();
     espacioVertical = new QSpacerItem(20,100,QSizePolicy::Minimum,QSizePolicy::Expanding);
     espacioHorizontal = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
+
     //Botones
     nuevo = new QPushButton("Nuevo Juego");
     cerrar = new QPushButton("Cerrar");
@@ -37,6 +38,8 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
     QObject::connect(nuevo,SIGNAL(clicked()),this,SLOT(NuevoJuego()));
     //Botones pausa y continuar aparecen y desaparecen
+    QObject::connect(nuevo,SIGNAL(clicked()),continuar,SLOT(hide()));
+    QObject::connect(nuevo,SIGNAL(clicked()),pause,SLOT(show()));
     QObject::connect(pause,SIGNAL(clicked()),continuar,SLOT(show()));
     QObject::connect(pause,SIGNAL(clicked()),pause,SLOT(hide()));
     QObject::connect(continuar,SIGNAL(clicked()),pause,SLOT(show()));
@@ -134,7 +137,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
     fichas[fila][columna]->setMinimumSize(60,60);
 
     //Comprobar el valor en el modelo
-    if(1)/*Aqui hay que comprobar el valor */
+    if(0)/*Aqui hay que comprobar el valor */
     {
         fichas[fila][columna]->setRange(0,9);
         fichas[fila][columna]->setStyleSheet("background-color: rgb(211, 211, 211);");
@@ -145,7 +148,8 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         fichas[fila][columna]->setRange(0,50);
         fichas[fila][columna]->setValue(8);//Comprobar en el modelo
         fichas[fila][columna]->setDisabled(TRUE);
-        fichas[fila][columna]->setStyleSheet("background-color: rgb(203, 158, 159);color: rgb(0, 0, 0);");
+        fichas[fila][columna]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:0, y2:1, stop:0.494318 rgba(68, 68, 68, 255), stop:0.505682 rgba(0, 0, 0, 255), stop:0.517045 rgba(84, 84, 84, 255));");
         fichas[fila][columna]->setFont(bloqueadas);
     }
+
 }
