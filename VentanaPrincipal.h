@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSpinBox>
 #include <QGridLayout>
+#include <QPushButton>
 
 #include "fichaventana.h"
 
@@ -19,6 +20,9 @@ class VentanaPrincipal : public QMainWindow
     QWidget *principal;
     QHBoxLayout *layoutPrincipal;
     QGridLayout *grid;
+    //boton pause
+    QPushButton *pause;
+    QPushButton *continuar;
     //Tam: tamano del tablero dificil
     FichaVentana *fichas[TAM][TAM];
 
