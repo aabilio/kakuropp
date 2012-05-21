@@ -2,4 +2,5 @@
 
 Partida::Partida()
 {
+
 }

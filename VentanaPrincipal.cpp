@@ -12,7 +12,8 @@ VentanaPrincipal::VentanaPrincipal()
     QSpacerItem *espacioVertical;
     QSpacerItem *espacioHorizontal;
 
-
+    //Instanciar controlador
+    controlador = new Controlador(this);
     //Instanciacion de objetos
     principal = new QWidget(this);
     layoutPrincipal = new QHBoxLayout(principal);
@@ -151,5 +152,4 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         fichas[fila][columna]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:0, y2:1, stop:0.494318 rgba(68, 68, 68, 255), stop:0.505682 rgba(0, 0, 0, 255), stop:0.517045 rgba(84, 84, 84, 255));");
         fichas[fila][columna]->setFont(bloqueadas);
     }
-
 }
