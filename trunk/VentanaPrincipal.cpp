@@ -63,6 +63,9 @@ VentanaPrincipal::VentanaPrincipal()
     layoutPrincipal->addLayout(botonera);
     layoutPrincipal->addItem(espacioHorizontal);
 
+    // Para juntarse los spinbox (te gusta?):
+    grid->setHorizontalSpacing(0);
+    grid->setVerticalSpacing(0);
     //Insertar Grid
     layoutPrincipal->addLayout(grid);
 
