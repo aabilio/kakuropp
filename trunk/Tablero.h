@@ -6,7 +6,7 @@
 #include <ctime>
 
 class Tablero
-{
+{public://borrar
     Fichas fichas[20][20];
     int dificultad;
 public:
@@ -15,6 +15,7 @@ public:
     bool asignarValor();
     bool colocarBloqueadas();
     bool colocarValor(int,int);
+    bool colocarSumas();
     int aleatorio(int a, int b)
     {
         return a+(int)(rand()/(1.0+RAND_MAX)*(b-a+1));

@@ -38,6 +38,7 @@ public slots:
     //Slot (Valor, fila, columna)
     void CambiarValor(int,int,int);
     void NuevoJuego();
+    void Resolver();
     //Slot dificulad (por ahora no)
     
 };

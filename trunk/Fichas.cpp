@@ -4,6 +4,8 @@ Fichas::Fichas()
 {
     bloqueada = false;
     valor = 0;
+    sumaDer = 0;
+    sumaAbajo = 0;
 }
 void Fichas::setBloqueada(bool _bloq)
 {
@@ -23,4 +25,20 @@ void Fichas::setValor(int _valor)
 int Fichas::getValor()
 {
     return valor;
+}
+void Fichas::setSumaDer(int _suma)
+{
+    sumaDer = _suma;
+}
+int Fichas::getSumaDer()
+{
+    return sumaDer;
+}
+void Fichas::setSumaAbajo(int _suma)
+{
+    sumaAbajo = _suma;
+}
+int Fichas::getSumaAbajo()
+{
+    return sumaAbajo;
 }
