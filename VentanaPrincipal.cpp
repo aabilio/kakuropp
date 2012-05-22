@@ -37,7 +37,7 @@ VentanaPrincipal::VentanaPrincipal()
       cerrar->setMaximumWidth(150);
       pause->setMaximumWidth(150);
       continuar->setMaximumWidth(150);
-    #elif
+    #else
       nuevo->setMaximumWidth(100);
       cerrar->setMaximumWidth(100);
       pause->setMaximumWidth(100);
@@ -147,7 +147,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
     #ifdef Q_WS_MAC
       QFont noBloqueadas("Arial",37,QFont::Normal);
       QFont bloqueadas("Arial",19,QFont::Bold);
-    #elif
+    #else
       QFont noBloqueadas("Arial",19,QFont::Normal);
       QFont bloqueadas("Arial",19,QFont::Bold);
     #endif
@@ -180,14 +180,14 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
                 && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0)
             #ifdef Q_WS_MAC
               sprintf(cadena, "%d   %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
-            #elif // Otros que no mac (windows por ejemplo):
+            #else // Otros que no mac (windows por ejemplo):
               sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
             #endif
         else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() == 0 &&
                 this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() != 0)
             #ifdef Q_WS_MAC
               sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
-            #elif
+            #else
               sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
             #endif
         else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() == 0
