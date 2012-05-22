@@ -7,6 +7,7 @@ VentanaPrincipal::VentanaPrincipal()
     //Definicion de Qobjetos locales
     QVBoxLayout *botonera;
     QPushButton *nuevo;
+    QPushButton *resolver;
     //Otros botones
     QPushButton *cerrar;
     QSpacerItem *espacioVertical;
@@ -24,6 +25,7 @@ VentanaPrincipal::VentanaPrincipal()
 
     //Botones
     nuevo = new QPushButton("Nuevo Juego");
+    resolver = new QPushButton("Resolver");
     cerrar = new QPushButton("Cerrar");
     pause = new QPushButton("Pause");
     continuar = new QPushButton("Continuar");
@@ -38,6 +40,7 @@ VentanaPrincipal::VentanaPrincipal()
     //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
     QObject::connect(nuevo,SIGNAL(clicked()),this,SLOT(NuevoJuego()));
+    QObject::connect(resolver,SIGNAL(clicked()),this,SLOT(Resolver()));
     //Botones pausa y continuar aparecen y desaparecen
     QObject::connect(nuevo,SIGNAL(clicked()),continuar,SLOT(hide()));
     QObject::connect(nuevo,SIGNAL(clicked()),pause,SLOT(show()));
@@ -48,6 +51,7 @@ VentanaPrincipal::VentanaPrincipal()
     //Ordenar layout y botones
     //Insertar botones
     botonera->addWidget(nuevo);
+    botonera->addWidget(resolver);
     botonera->addWidget(cerrar);
     botonera->addItem(espacioVertical);
     botonera->addWidget(pause);
@@ -83,6 +87,8 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //SLOT Nuevo Juego
 void VentanaPrincipal::NuevoJuego()
 {
+    //Esto es una prueba
+    this->controlador->juego.partida.tablero.generarTablero();
     //Se borra tablero
     BorrarFichas();
     //se inicia tablero
@@ -108,7 +114,7 @@ void VentanaPrincipal::ColocarFichas()
     int fila,columna;
     //Comproba dificultad en el modelo para
     //definir tamaño del tablero
-    int dificultad = 6;
+    int dificultad = 8;
     for(fila=0;fila<dificultad;fila++)
         for(columna=0;columna<dificultad;columna++)
         {
@@ -128,28 +134,65 @@ void VentanaPrincipal::ColocarFichas()
 void VentanaPrincipal::PintarFichas(int fila,int columna)
 {
     //Letra de no bloqueadas y bloqueadas
-    QFont noBloqueadas("Arial",24,QFont::Normal);
-    QFont bloqueadas("Arial",24,QFont::Bold);
+    QFont noBloqueadas("Arial",19,QFont::Normal);
+    QFont bloqueadas("Arial",19,QFont::Bold);
 
     //Cosas comunes
     fichas[fila][columna]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     fichas[fila][columna]->setAlignment(Qt::AlignCenter);
     fichas[fila][columna]->setButtonSymbols(QSpinBox::NoButtons);
-    fichas[fila][columna]->setMinimumSize(60,60);
+    fichas[fila][columna]->setMinimumSize(80,80);
 
     //Comprobar el valor en el modelo
-    if(0)/*Aqui hay que comprobar el valor */
+    //Esto hay que cambiarlo
+    if(!this->controlador->juego.partida.tablero.fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
     {
         fichas[fila][columna]->setRange(0,9);
         fichas[fila][columna]->setStyleSheet("background-color: rgb(211, 211, 211);");
         fichas[fila][columna]->setFont(noBloqueadas);
+        //fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero.fichas[fila][columna].getValor());
         fichas[fila][columna]->clear();
     }else
     {
+        char cadena[8];
         fichas[fila][columna]->setRange(0,50);
-        fichas[fila][columna]->setValue(8);//Comprobar en el modelo
+        fichas[fila][columna]->setStyleSheet("background-color: qconicalgradient(cx:0.493318, cy:0.676, angle:327.6, stop:0.340909 rgba(192, 192, 192, 255), stop:0.346591 rgba(155, 155, 155, 255));");
+        //Esto hay que mejorarlo(con metodos)
+        //Estos else if son para dibujar las sumas, hay que mejorarlo
+        //falla algo
+        if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0
+                && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0)
+            sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
+        else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() == 0 &&
+                this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() != 0)
+            sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+        else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() == 0
+                && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() != 0)
+            sprintf(cadena, "    %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+        else
+        {
+            sprintf(cadena,"   ");
+            fichas[fila][columna]->setStyleSheet("background-color: qlineargradient(spread:repeat, x1:0, y1:0.431818, x2:1, y2:0.437273, stop:0 rgba(151, 151, 151, 255), stop:1 rgba(124, 124, 124, 255));");
+        }
+        fichas[fila][columna]->setSpecialValueText(cadena);
+       // fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());//Comprobar en el modelo
         fichas[fila][columna]->setDisabled(TRUE);
-        fichas[fila][columna]->setStyleSheet("background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:0, y2:1, stop:0.494318 rgba(68, 68, 68, 255), stop:0.505682 rgba(0, 0, 0, 255), stop:0.517045 rgba(84, 84, 84, 255));");
+
         fichas[fila][columna]->setFont(bloqueadas);
     }
+}
+
+void VentanaPrincipal::Resolver()
+{
+    int dificultad = 8;
+    for(int fila=0;fila<dificultad;fila++)
+        for(int columna=0;columna<dificultad;columna++)
+        {
+            if(!this->controlador->juego.partida.tablero.fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
+            {
+                fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero.fichas[fila][columna].getValor());
+
+            }
+        }
+
 }

@@ -4,7 +4,7 @@
 #include "Tablero.h"
 
 class Partida
-{
+{public://borrar
     Tablero tablero;
 public:
     Partida();

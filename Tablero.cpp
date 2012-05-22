@@ -2,12 +2,13 @@
 
 Tablero::Tablero()
 {
-    dificultad = 6;
+    dificultad = 8;
     srand(time(NULL));
 }
 
 bool Tablero::generarTablero()
 {
+    //Hya que borrar las fichas a menos que se instancie cada vez un tablero nuevo
     //Bloquear fila=0 y columna =0
     for(int fila=0; fila<dificultad;fila++)
         fichas[fila][0].setBloqueada(true);
@@ -28,12 +29,13 @@ bool Tablero::generarTablero()
 
         }
     }
+    colocarSumas();
     return true;
 }
 bool Tablero::colocarBloqueadas()
 {
     //Generar numero de bloqueadas nuevas
-    int numbloqueadas = aleatorio(5,8);
+    int numbloqueadas = aleatorio(dificultad,dificultad+4);
     for(int i = numbloqueadas; i>0; i--)
     {
         //Elegir lado y elemento
@@ -112,6 +114,34 @@ bool Tablero::colocarValor(int filaTope,int colTope)
 
     }
     fichas[filaTope][colTope].setValor(dato);
+    return true;
+
+}
+bool Tablero::colocarSumas()
+{
+    int suma =0;
+    for(int i=0; i<dificultad;i++)
+        for(int j=dificultad-1;j>=0;j--)
+        {
+            suma = suma+fichas[i][j].getValor();
+            if(fichas[i][j].getBloqueada())
+            {
+                fichas[i][j].setSumaDer(suma);
+                suma=0;
+            }
+
+        }
+    for(int i=0; i<dificultad;i++)
+        for(int j=dificultad-1;j>=0;j--)
+        {
+            suma = suma+fichas[j][i].getValor();
+            if(fichas[j][i].getBloqueada())
+            {
+                fichas[j][i].setSumaAbajo(suma);
+                suma=0;
+            }
+
+        }
     return true;
 
 }
