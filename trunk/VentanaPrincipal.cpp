@@ -32,10 +32,17 @@ VentanaPrincipal::VentanaPrincipal()
     //resto de botones
 
     //Tamaño botones
-    nuevo->setMaximumWidth(100);
-    cerrar->setMaximumWidth(100);
-    pause->setMaximumWidth(100);
-    continuar->setMaximumWidth(100);
+    #ifdef Q_WS_MAC
+      nuevo->setMaximumWidth(150);
+      cerrar->setMaximumWidth(150);
+      pause->setMaximumWidth(150);
+      continuar->setMaximumWidth(150);
+    #elif
+      nuevo->setMaximumWidth(100);
+      cerrar->setMaximumWidth(100);
+      pause->setMaximumWidth(100);
+      continuar->setMaximumWidth(100);
+    #endif
 
     //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
@@ -137,8 +144,14 @@ void VentanaPrincipal::ColocarFichas()
 void VentanaPrincipal::PintarFichas(int fila,int columna)
 {
     //Letra de no bloqueadas y bloqueadas
-    QFont noBloqueadas("Arial",19,QFont::Normal);
-    QFont bloqueadas("Arial",19,QFont::Bold);
+    #ifdef Q_WS_MAC
+      QFont noBloqueadas("Arial",37,QFont::Normal);
+      QFont bloqueadas("Arial",19,QFont::Bold);
+    #elif
+      QFont noBloqueadas("Arial",19,QFont::Normal);
+      QFont bloqueadas("Arial",19,QFont::Bold);
+    #endif
+
 
     //Cosas comunes
     fichas[fila][columna]->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -165,10 +178,18 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         //falla algo
         if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0
                 && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0)
-            sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
+            #ifdef Q_WS_MAC
+              sprintf(cadena, "%d   %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
+            #elif // Otros que no mac (windows por ejemplo):
+              sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
+            #endif
         else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() == 0 &&
                 this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() != 0)
-            sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+            #ifdef Q_WS_MAC
+              sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+            #elif
+              sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+            #endif
         else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() == 0
                 && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() != 0)
             sprintf(cadena, "    %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
