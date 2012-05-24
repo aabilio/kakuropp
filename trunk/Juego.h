@@ -10,6 +10,7 @@ class Juego
 {
 public:
     Juego();
+    void nuevaPartida();
 
     Ayuda ayuda;
     Partida partida;

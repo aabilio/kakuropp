@@ -6,10 +6,11 @@ VentanaPrincipal::VentanaPrincipal()
 {
     //Definicion de Qobjetos locales
     QVBoxLayout *botonera;
+    //Botones
     QPushButton *nuevo;
     QPushButton *resolver;
-    //Otros botones
     QPushButton *cerrar;
+    //Espacios
     QSpacerItem *espacioVertical;
     QSpacerItem *espacioHorizontal;
 
@@ -98,7 +99,7 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 void VentanaPrincipal::NuevoJuego()
 {
     //Esto es una prueba
-    this->controlador->juego.partida.tablero.generarTablero();
+    this->controlador->pulsarNuevo();
     //Se borra tablero
     BorrarFichas();
     //se inicia tablero
@@ -161,7 +162,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
 
     //Comprobar el valor en el modelo
     //Esto hay que cambiarlo
-    if(!this->controlador->juego.partida.tablero.fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
+    if(!this->controlador->juego.partida.tablero->fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
     {
         fichas[fila][columna]->setRange(0,9);
         fichas[fila][columna]->setStyleSheet("background-color: rgb(211, 211, 211);");
@@ -176,23 +177,24 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         //Esto hay que mejorarlo(con metodos)
         //Estos else if son para dibujar las sumas, hay que mejorarlo
         //falla algo
-        if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0
-                && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer()!= 0)
+        if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer()!= 0
+                && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer()!= 0)
             #ifdef Q_WS_MAC
-              sprintf(cadena, "%d   %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
+              sprintf(cadena, "%d   %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
             #else // Otros que no mac (windows por ejemplo):
-              sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());
+              sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
             #endif
-        else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() == 0 &&
-                this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() != 0)
+        else if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer() == 0 &&
+                this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo() != 0)
             #ifdef Q_WS_MAC
-              sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+
+            sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
             #else
-              sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+              sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
             #endif
-        else if(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo() == 0
-                && this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer() != 0)
-            sprintf(cadena, "    %d",this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaAbajo());
+        else if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo() == 0
+                && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer() != 0)
+            sprintf(cadena, "    %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
         else
         {
             sprintf(cadena,"   ");
@@ -212,9 +214,9 @@ void VentanaPrincipal::Resolver()
     for(int fila=0;fila<dificultad;fila++)
         for(int columna=0;columna<dificultad;columna++)
         {
-            if(!this->controlador->juego.partida.tablero.fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
+            if(!this->controlador->juego.partida.tablero->fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
             {
-                fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero.fichas[fila][columna].getValor());
+                fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero->fichas[fila][columna].getValor());
 
             }
         }
