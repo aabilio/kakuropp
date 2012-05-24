@@ -1,4 +1,5 @@
 #include "Tablero.h"
+#include <QtGui>
 
 Tablero::Tablero()
 {
@@ -8,7 +9,8 @@ Tablero::Tablero()
 
 bool Tablero::generarTablero()
 {
-    //Hya que borrar las fichas a menos que se instancie cada vez un tablero nuevo
+    //Poner todas las fichas a 0;
+    reiniciarFichas();
     //Bloquear fila=0 y columna =0
     for(int fila=0; fila<dificultad;fila++)
         fichas[fila][0].setBloqueada(true);
@@ -23,7 +25,10 @@ bool Tablero::generarTablero()
         {
             if(!fichas[i][j].getBloqueada())
             {
-                colocarValor(i,j);
+                if(!colocarValor(i,j))
+                {
+                    return false;
+                }
                 //si falla generar nuevo tablero;
             }
 
@@ -144,4 +149,15 @@ bool Tablero::colocarSumas()
         }
     return true;
 
+}
+void Tablero::reiniciarFichas()
+{
+    for(int fila=0;fila < MAX; fila++)
+        for(int col =0;col< MAX;col++)
+        {
+            fichas[fila][col].setBloqueada(false);
+            fichas[fila][col].setValor(0);
+            fichas[fila][col].setSumaDer(0);
+            fichas[fila][col].setSumaAbajo(0);
+        }
 }

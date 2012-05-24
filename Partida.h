@@ -2,12 +2,16 @@
 #define PARTIDA_H
 
 #include "Tablero.h"
+#include "ctime"
 
 class Partida
 {public://borrar
-    Tablero tablero;
+    Tablero *tablero;
+    int tiempo;
 public:
     Partida();
+    void nuevoTablero();
+    void resolverPartida();
 };
 
 #endif // PARTIDA_H

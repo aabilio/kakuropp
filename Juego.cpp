@@ -4,3 +4,8 @@ Juego::Juego()
 {
 
 }
+
+void Juego::nuevaPartida()
+{
+    this->partida.nuevoTablero();
+}
