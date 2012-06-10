@@ -17,7 +17,5 @@ QString Controlador::pulsarAyuda(void)
     QString html;
     html = juego.mostrarAyuda();
 
-    //Cambio esto para ver el commit
-
     return html;
 }

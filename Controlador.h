@@ -19,7 +19,6 @@ public:
 
     void pulsarNuevo();
     QString pulsarAyuda();
-    //Cambio esto para ver el commit
 
 signals:
     
