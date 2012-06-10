@@ -11,6 +11,7 @@ class Juego
 public:
     Juego();
     void nuevaPartida();
+    QString mostrarAyuda();
 
     Ayuda ayuda;
     Partida partida;
