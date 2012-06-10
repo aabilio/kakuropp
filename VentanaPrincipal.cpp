@@ -1,5 +1,7 @@
 #include "VentanaPrincipal.h"
 #include <QObject>
+#include <QTextStream>
+#include <QTextDocument>
 #include "Controlador.h"
 
 VentanaPrincipal::VentanaPrincipal()
@@ -14,33 +16,45 @@ VentanaPrincipal::VentanaPrincipal()
     QSpacerItem *espacioVertical;
     QSpacerItem *espacioHorizontal;
 
+
     //Instanciar controlador
     controlador = new Controlador(this);
     //Instanciacion de objetos
     principal = new QWidget(this);
+    qtbrowser = new QTextBrowser(this);
     layoutPrincipal = new QHBoxLayout(principal);
-    botonera =new QVBoxLayout();
+    botonera = new QVBoxLayout();
     grid = new QGridLayout();
     espacioVertical = new QSpacerItem(20,100,QSizePolicy::Minimum,QSizePolicy::Expanding);
     espacioHorizontal = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
 
     //Botones
-    nuevo = new QPushButton("Nuevo Juego");
-    resolver = new QPushButton("Resolver");
-    cerrar = new QPushButton("Cerrar");
-    pause = new QPushButton("Pause");
-    continuar = new QPushButton("Continuar");
+    nuevo = new QPushButton(tr("&Nuevo Juego"));
+    nuevo->setShortcut(tr("n"));
+    resolver = new QPushButton(tr("&Resolver"));
+    resolver->setShortcut(tr("r"));
+    cerrar = new QPushButton(tr("Cerrar"));
+    cerrar->setShortcut(tr("Esc"));
+    comoJugar = new QPushButton(tr("Reglas"));
+    comoJugar->setShortcut(tr("?"));
+    isayuda = false;
+    pause = new QPushButton(tr("&Pause"));
+    pause->setShortcut(tr("p"));
+    continuar = new QPushButton(tr("&Continuar"));
+    continuar->setShortcut(tr("p"));
     //resto de botones
 
     //Tamaño botones
     #ifdef Q_WS_MAC
       nuevo->setMaximumWidth(150);
       cerrar->setMaximumWidth(150);
+      comoJugar->setMaximumWidth(150);
       pause->setMaximumWidth(150);
       continuar->setMaximumWidth(150);
     #else
       nuevo->setMaximumWidth(100);
       cerrar->setMaximumWidth(100);
+      comoJugar->setMaximumWidth(100);
       pause->setMaximumWidth(100);
       continuar->setMaximumWidth(100);
     #endif
@@ -52,16 +66,23 @@ VentanaPrincipal::VentanaPrincipal()
     //Botones pausa y continuar aparecen y desaparecen
     QObject::connect(nuevo,SIGNAL(clicked()),continuar,SLOT(hide()));
     QObject::connect(nuevo,SIGNAL(clicked()),pause,SLOT(show()));
+
+    QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(MostrarAyuda()));
+    QObject::connect(pause,SIGNAL(clicked()),comoJugar,SLOT(hide()));
+    QObject::connect(continuar,SIGNAL(clicked()),comoJugar,SLOT(show()));
+
     QObject::connect(pause,SIGNAL(clicked()),continuar,SLOT(show()));
     QObject::connect(pause,SIGNAL(clicked()),pause,SLOT(hide()));
     QObject::connect(continuar,SIGNAL(clicked()),pause,SLOT(show()));
     QObject::connect(continuar,SIGNAL(clicked()),continuar,SLOT(hide()));
+
     //Ordenar layout y botones
     //Insertar botones
     botonera->addWidget(nuevo);
     botonera->addWidget(resolver);
     botonera->addWidget(cerrar);
     botonera->addItem(espacioVertical);
+    botonera->addWidget(comoJugar);
     botonera->addWidget(pause);
     botonera->addWidget(continuar);
     continuar->hide();
@@ -70,10 +91,13 @@ VentanaPrincipal::VentanaPrincipal()
     //Insertar botonera
     layoutPrincipal->addLayout(botonera);
     layoutPrincipal->addItem(espacioHorizontal);
+    layoutPrincipal->addWidget(qtbrowser);
+    qtbrowser->hide();
 
     // Para juntarse los spinbox (te gusta?):
     grid->setHorizontalSpacing(0);
     grid->setVerticalSpacing(0);
+
     //Insertar Grid
     layoutPrincipal->addLayout(grid);
 
@@ -86,6 +110,47 @@ VentanaPrincipal::VentanaPrincipal()
     //Iniciar primer tablero
     ColocarFichas();
 
+}
+
+//SLOT mostrar ayuda
+void VentanaPrincipal::MostrarAyuda()
+{
+    int dificultad = 8, fila, columna;
+    static QString html;
+    static QTextDocument *doc = new QTextDocument;
+    html = this->controlador->pulsarAyuda();
+    doc->setHtml(html);
+    this->qtbrowser->setDocument(doc);
+
+    this->qtbrowser->setGeometry(1000, 1000, 400, 400);
+    this->qtbrowser->setMinimumSize(this->principal->width()-200,this->principal->height()-100);
+    this->qtbrowser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    //Al pulsar en la ayuda
+    if (this->isayuda) //La ayuda ya en pantalla
+    {
+        //Esconder ayuda:
+        this->qtbrowser->hide();
+        //Mostrar Fichas
+        for(fila=0;fila<dificultad;fila++)
+            for(columna=0;columna<dificultad;columna++)
+              this->fichas[fila][columna]->show();
+
+        this->isayuda = false;
+        pause->show();
+    }
+    else //No hay ayuda en pantalla
+    {
+        //Esconder Fichas
+        for(fila=0;fila<dificultad;fila++)
+            for(columna=0;columna<dificultad;columna++)
+              this->fichas[fila][columna]->hide();
+        //Mostrar ayuda:
+        this->qtbrowser->show();
+
+        this->isayuda = true;
+        pause->hide();
+    }
 }
 
 //SLOT cambiar valor
@@ -139,6 +204,7 @@ void VentanaPrincipal::ColocarFichas()
             //Conexiones para pausar y continuar
             QObject::connect(pause,SIGNAL(clicked()),fichas[fila][columna],SLOT(hide()));
             QObject::connect(continuar,SIGNAL(clicked()),fichas[fila][columna],SLOT(show()));
+            QObject::connect(pause,SIGNAL(clicked()),fichas[fila][columna],SLOT(hide()));
         }
 }
 

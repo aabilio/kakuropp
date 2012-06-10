@@ -5,6 +5,7 @@
 #include <QSpinBox>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QTextBrowser>
 
 #include "fichaventana.h"
 
@@ -20,9 +21,12 @@ class VentanaPrincipal : public QMainWindow
     QWidget *principal;
     QHBoxLayout *layoutPrincipal;
     QGridLayout *grid;
+    QTextBrowser *qtbrowser;
     //boton pause
     QPushButton *pause;
     QPushButton *continuar;
+    QPushButton *comoJugar;
+    bool isayuda;
     //Tam: tamano del tablero dificil
     FichaVentana *fichas[TAM][TAM];
 
@@ -39,6 +43,7 @@ public slots:
     void CambiarValor(int,int,int);
     void NuevoJuego();
     void Resolver();
+    void MostrarAyuda();
     //Slot dificulad (por ahora no)
     
 };
