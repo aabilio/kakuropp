@@ -19,3 +19,13 @@ QString Controlador::pulsarAyuda(void)
     //Comentario de siempre
     return html;
 }
+
+int Controlador::getLevel(void)
+{
+    return this->juego.partida.getLevel();
+}
+
+void Controlador::setLevel(int level)
+{
+    this->juego.partida.setLevel(level);
+}

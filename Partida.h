@@ -5,13 +5,17 @@
 #include "ctime"
 
 class Partida
-{public://borrar
+{
+    int level;
+public://borrar
     Tablero *tablero;
     int tiempo;
 public:
     Partida();
     void nuevoTablero();
     void resolverPartida();
+    void setLevel (int level);
+    int getLevel(void);
 };
 
 #endif // PARTIDA_H
