@@ -9,7 +9,9 @@ class FichaVentana : public QSpinBox
 
     int fila,columna;
 public:
+    FichaVentana(QWidget *parent = 0);
     explicit FichaVentana(int,int, QWidget *parent = 0);
+    void setFilCol(int f, int c);
 
 signals:
     //Enviar Valor, fila y columna

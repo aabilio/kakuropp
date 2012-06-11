@@ -123,8 +123,10 @@ void VentanaPrincipal::MostrarAyuda()
     doc->setHtml(html);
     this->qtbrowser->setDocument(doc);
 
-    this->qtbrowser->setGeometry(1000, 1000, 400, 400);
+    //FIXME: mejorar el tamaño. El programa se cierra si dificultad < 8
+    //this->qtbrowser->setGeometry(1000, 1000, 400, 400);
     this->qtbrowser->setMinimumSize(this->principal->width()-200,this->principal->height()-100);
+    //this->qtbrowser->setMinimumSize(200,200);
     this->qtbrowser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->qtbrowser->setLocale(spanish);
 
