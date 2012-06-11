@@ -29,3 +29,8 @@ void Controlador::setLevel(int level)
 {
     this->juego.partida.setLevel(level);
 }
+void Controlador::setValorUser(int valor, int fila,int columna)
+{
+    qDebug() << "Fila-Columna:" << fila << "-" << columna << " ";
+    this->juego.partida.tablero->fichas[fila][columna].setValorUser(valor);
+}

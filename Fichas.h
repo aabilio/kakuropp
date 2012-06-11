@@ -5,6 +5,7 @@ class Fichas
 {
     bool bloqueada;
     int valor;
+    int valor_user;
     int sumaDer;
     int sumaAbajo;
 public:
@@ -17,6 +18,8 @@ public:
     void setSumaDer(int);
     int getSumaAbajo();
     void setSumaAbajo(int);
+    int getValorUser();
+    void setValorUser(int);
 };
 
 #endif // FICHAS_H

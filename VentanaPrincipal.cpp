@@ -180,8 +180,7 @@ void VentanaPrincipal::MostrarAyuda()
 //SLOT cambiar valor
 void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 {
-    //Se necesita funciones de controlador para conectar
-    //con la logica del programa
+    controlador->setValorUser(valor,fila,columna);
 }
 
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
