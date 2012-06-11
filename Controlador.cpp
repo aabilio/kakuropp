@@ -16,6 +16,6 @@ QString Controlador::pulsarAyuda(void)
 {
     QString html;
     html = juego.mostrarAyuda();
-
+    //Comentario de siempre
     return html;
 }
