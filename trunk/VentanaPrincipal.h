@@ -46,6 +46,9 @@ public slots:
     void NuevoJuegoFacil();
     void NuevoJuegoMedio();
     void NuevoJuegoDificil();
+    void JuegoTerminado();
+    void slotcontinuar();
+    void slotpause();
     //Slot dificulad (por ahora no)
     
 };
