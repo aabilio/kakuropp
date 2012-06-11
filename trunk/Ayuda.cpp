@@ -24,7 +24,7 @@ void Ayuda::setAyuda(QString text)
                     "<h1 align=center style=\"color: Black;\">Juego de Kakuro</h1>"
                     "<h2 align=center style=\"color: Blue;\">Reglas B&aacute;sicas</h2>"
                     "<br><br>"
-                    "<p align=justify>Las reglas para resolver un Kakuro son muy sencillas, se trata de rellenar las casillas con n&uacute;meros del 1 al 9, teniendo en cuenta que:</p>"
+                    "<p align=justify>Las reglas para resolver un Kakuro son muy sencillas, se trata de rellenar las casillas con n&uacute;meros del <span style=\"color: Red;\">1 al 9</span> , teniendo en cuenta que:</p>"
                     "<ul>"
                     "<li style=\"color: Blue;\">Cada fila o columna debe sumar lo indicado a la izquierda o arriba (respectivamente) de la misma</li>"
                     "<li style=\"color: Blue;\">No se puede repetir un mismo n&uacute;mero en una suma (fila o columna)</li>"
