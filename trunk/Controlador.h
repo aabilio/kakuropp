@@ -19,6 +19,8 @@ public:
 
     void pulsarNuevo();
     QString pulsarAyuda();
+    int getLevel(void);
+    void setLevel(int level);
 
 signals:
     
