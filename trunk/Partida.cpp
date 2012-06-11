@@ -1,17 +1,19 @@
 #include "Partida.h"
-
+#include <QtGui>
 Partida::Partida()
 {
-    tablero = new Tablero;
+    level = 5;
+    tablero = new Tablero(this->level);
     tiempo = 0;
 }
 
 void Partida::nuevoTablero()
 {
-    while(!tablero->generarTablero())
+    qDebug () << "ejecuto nuevo tablero";
+    while(!tablero->generarTablero(this->level))
     {
         delete tablero;
-        tablero = new Tablero;
+        tablero = new Tablero(this->level);
     }
 }
 

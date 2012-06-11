@@ -11,8 +11,8 @@ class Tablero
     Fichas fichas[MAX][MAX];
     int dificultad;
 public:
-    Tablero();
-    bool generarTablero();
+    Tablero(int);
+    bool generarTablero(int);
     bool asignarValor();
     bool colocarBloqueadas();
     bool colocarValor(int,int);
