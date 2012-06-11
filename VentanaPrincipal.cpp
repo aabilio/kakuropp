@@ -13,6 +13,7 @@ VentanaPrincipal::VentanaPrincipal()
     QPushButton *nuevo_medio;
     QPushButton *nuevo_dificil;
     QPushButton *resolver;
+    QPushButton *terminar;
     QPushButton *cerrar;
     //Espacios
     QSpacerItem *espacioVertical;
@@ -39,6 +40,8 @@ VentanaPrincipal::VentanaPrincipal()
     nuevo_dificil->setShortcut(tr("d"));
     resolver = new QPushButton(tr("&Resolver"));
     resolver->setShortcut(tr("r"));
+    terminar = new QPushButton(tr("&Terminar"));
+    terminar->setShortcut(tr("t"));
     cerrar = new QPushButton(tr("Cerrar"));
     cerrar->setShortcut(tr("Esc"));
     comoJugar = new QPushButton(tr("Reglas"));
@@ -55,14 +58,16 @@ VentanaPrincipal::VentanaPrincipal()
       nuevo_facil->setMaximumWidth(150);
       nuevo_medio->setMaximumWidth(150);
       nuevo_dificil->setMaximumWidth(150);
+      terminar->setMaximumWidth(150);
       cerrar->setMaximumWidth(150);
       comoJugar->setMaximumWidth(150);
       pause->setMaximumWidth(150);
       continuar->setMaximumWidth(150);
     #else
-      nuevo_facil->setMaximumWidth(150);
-      nuevo_medio->setMaximumWidth(150);
-      nuevo_dificil->setMaximumWidth(150);
+      nuevo_facil->setMaximumWidth(100);
+      nuevo_medio->setMaximumWidth(100);
+      nuevo_dificil->setMaximumWidth(100);
+      terminar->setMaximumWidth(100);
       cerrar->setMaximumWidth(100);
       comoJugar->setMaximumWidth(100);
       pause->setMaximumWidth(100);
@@ -75,13 +80,23 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(nuevo_medio,SIGNAL(clicked()),this,SLOT(NuevoJuegoMedio()));
     QObject::connect(nuevo_dificil,SIGNAL(clicked()),this,SLOT(NuevoJuegoDificil()));
     QObject::connect(resolver,SIGNAL(clicked()),this,SLOT(Resolver()));
-    //Botones pausa y continuar aparecen y desaparecen
+    //Botones pausa y continuar, terminar y resolver aparecen y desaparecen
+    QObject::connect(terminar,SIGNAL(clicked()),this,SLOT(JuegoTerminado()));
+        //Para boton facil
     QObject::connect(nuevo_facil,SIGNAL(clicked()),continuar,SLOT(hide()));
     QObject::connect(nuevo_facil,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(nuevo_facil,SIGNAL(clicked()),terminar,SLOT(show()));
+    QObject::connect(nuevo_facil,SIGNAL(clicked()),resolver,SLOT(show()));
+        //Para boton medio
     QObject::connect(nuevo_medio,SIGNAL(clicked()),continuar,SLOT(hide()));
     QObject::connect(nuevo_medio,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(nuevo_medio,SIGNAL(clicked()),terminar,SLOT(show()));
+    QObject::connect(nuevo_medio,SIGNAL(clicked()),resolver,SLOT(show()));
+        //para boton dificil
     QObject::connect(nuevo_dificil,SIGNAL(clicked()),continuar,SLOT(hide()));
     QObject::connect(nuevo_dificil,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(nuevo_dificil,SIGNAL(clicked()),terminar,SLOT(show()));
+    QObject::connect(nuevo_dificil,SIGNAL(clicked()),resolver,SLOT(show()));
 
     QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(MostrarAyuda()));
     QObject::connect(pause,SIGNAL(clicked()),comoJugar,SLOT(hide()));
@@ -91,7 +106,9 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(pause,SIGNAL(clicked()),pause,SLOT(hide()));
     QObject::connect(continuar,SIGNAL(clicked()),pause,SLOT(show()));
     QObject::connect(continuar,SIGNAL(clicked()),continuar,SLOT(hide()));
-
+    QObject::connect(continuar,SIGNAL(clicked()),this,SLOT(slotcontinuar()));
+    QObject::connect(pause,SIGNAL(clicked()),this,SLOT(slotpause()));
+    QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(slotpause()));
     //Ordenar layout y botones
     //Insertar botones
     botonera->addWidget(nuevo_facil);
@@ -99,12 +116,15 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(nuevo_dificil);
     botonera->addSpacing(15);
     botonera->addWidget(resolver);
+    botonera->addWidget(terminar);
     botonera->addWidget(cerrar);
     botonera->addItem(espacioVertical);
     botonera->addWidget(comoJugar);
     botonera->addWidget(pause);
     botonera->addWidget(continuar);
+    terminar->hide();
     continuar->hide();
+    resolver->hide();
 
 
     //Insertar botonera
@@ -129,6 +149,11 @@ VentanaPrincipal::VentanaPrincipal()
     //Iniciar primer tablero
     ColocarFichas();
 
+}
+//SLOT terminado
+void VentanaPrincipal::JuegoTerminado()
+{
+    //No hago nada
 }
 
 //SLOT mostrar ayuda
@@ -162,6 +187,8 @@ void VentanaPrincipal::MostrarAyuda()
 
         this->isayuda = false;
         pause->show();
+        comoJugar->show();
+        continuar->hide();
     }
     else //No hay ayuda en pantalla
     {
@@ -174,6 +201,8 @@ void VentanaPrincipal::MostrarAyuda()
 
         this->isayuda = true;
         pause->hide();
+        comoJugar->hide();
+        continuar->show();
     }
 }
 
@@ -186,6 +215,9 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
+    this->qtbrowser->hide();
+    this->comoJugar->show();
+    this->isayuda = false;
     int tam_anterior = controlador->getLevel();
     switch(level)
     {
@@ -320,6 +352,17 @@ void VentanaPrincipal::Resolver()
             }
         }
 
+}
+//SLOt pausa y continuar
+void VentanaPrincipal::slotpause()
+{
+    //Parar temporizador
+}
+void VentanaPrincipal::slotcontinuar()
+{
+    //continuar temporizador
+    this->qtbrowser->hide();
+    this->isayuda = false;
 }
 
 //SLot nuevo juegos facil,medio,dificil
