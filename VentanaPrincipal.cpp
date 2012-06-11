@@ -135,7 +135,8 @@ VentanaPrincipal::VentanaPrincipal()
 void VentanaPrincipal::MostrarAyuda()
 {
     QLocale spanish(QLocale::Spanish, QLocale::Spain);
-    int dificultad = 5, fila, columna;
+    int dificultad = controlador->getLevel();
+    int fila, columna;
     static QString html;
     static QTextDocument *doc = new QTextDocument;
     html = this->controlador->pulsarAyuda();
@@ -186,19 +187,30 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
-    //Esto es una prueba
+    int tam_anterior = controlador->getLevel();
+    switch(level)
+    {
+        case 1:
+            controlador->setLevel(5);
+            break;
+        case 2:
+            controlador->setLevel(6);
+            break;
+        case 3:
+            controlador->setLevel(7);
+            break;
+    }
     this->controlador->pulsarNuevo();
     //Se borra tablero
-    BorrarFichas();
+    BorrarFichas(tam_anterior);
     //se inicia tablero
     ColocarFichas();
 }
 
 //metodo borrar fichas
-void VentanaPrincipal::BorrarFichas()
+void VentanaPrincipal::BorrarFichas(int tam)
 {
-    int tam = grid->columnCount(); //Cuento las columnas, col == filas
-
+    //int tam = grid->columnCount(); //Cuento las columnas, col == filas
     for(int fila=0;fila<tam;fila++)
         for(int columna=0;columna<tam;columna++)
         {
@@ -213,7 +225,7 @@ void VentanaPrincipal::ColocarFichas()
     int fila,columna;
     //Comproba dificultad en el modelo para
     //definir tamaño del tablero
-    int dificultad = 5;
+    int dificultad = controlador->getLevel();
     for(fila=0;fila<dificultad;fila++)
         for(columna=0;columna<dificultad;columna++)
         {
@@ -267,7 +279,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         //Estos else if son para dibujar las sumas, hay que mejorarlo
         //falla algo
         if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer()!= 0
-                && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer()!= 0)
+                && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo()!= 0)
             #ifdef Q_WS_MAC
               sprintf(cadena, "%d   %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
             #else // Otros que no mac (windows por ejemplo):
@@ -276,14 +288,13 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         else if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer() == 0 &&
                 this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo() != 0)
             #ifdef Q_WS_MAC
-
-            sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
+              sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
             #else
               sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
             #endif
         else if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo() == 0
                 && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer() != 0)
-            sprintf(cadena, "    %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
+            sprintf(cadena, "    %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
         else
         {
             sprintf(cadena,"   ");
@@ -299,7 +310,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
 
 void VentanaPrincipal::Resolver()
 {
-    int dificultad = 8;
+    int dificultad = controlador->getLevel();
     for(int fila=0;fila<dificultad;fila++)
         for(int columna=0;columna<dificultad;columna++)
         {

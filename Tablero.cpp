@@ -1,14 +1,15 @@
 #include "Tablero.h"
 #include <QtGui>
 
-Tablero::Tablero()
+Tablero::Tablero(int level)
 {
-    dificultad = 5;
+    dificultad = level;
     srand(time(NULL));
 }
 
-bool Tablero::generarTablero()
+bool Tablero::generarTablero(int level)
 {
+    this->dificultad = level;
     //Poner todas las fichas a 0;
     reiniciarFichas();
     //Bloquear fila=0 y columna =0
@@ -152,8 +153,8 @@ bool Tablero::colocarSumas()
 }
 void Tablero::reiniciarFichas()
 {
-    for(int fila=0;fila < MAX; fila++)
-        for(int col =0;col< MAX;col++)
+    for(int fila=0;fila < this->dificultad; fila++)
+        for(int col =0;col< this->dificultad;col++)
         {
             fichas[fila][col].setBloqueada(false);
             fichas[fila][col].setValor(0);

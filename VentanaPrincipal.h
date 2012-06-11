@@ -33,7 +33,7 @@ class VentanaPrincipal : public QMainWindow
 public:
     explicit VentanaPrincipal();
     void ColocarFichas();
-    void BorrarFichas();
+    void BorrarFichas(int);
     void PintarFichas(int,int);
     void NuevoJuego(int);
 signals:
