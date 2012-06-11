@@ -4,7 +4,7 @@
 
 Ayuda::Ayuda()
 {
-
+    this->setAyuda("Nada");
 }
 
 QString Ayuda::getAyuda()
