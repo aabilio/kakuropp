@@ -3,7 +3,7 @@
 
 Tablero::Tablero()
 {
-    dificultad = 8;
+    dificultad = 5;
     srand(time(NULL));
 }
 

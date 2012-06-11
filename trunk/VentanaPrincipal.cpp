@@ -9,7 +9,9 @@ VentanaPrincipal::VentanaPrincipal()
     //Definicion de Qobjetos locales
     QVBoxLayout *botonera;
     //Botones
-    QPushButton *nuevo;
+    QPushButton *nuevo_facil;
+    QPushButton *nuevo_medio;
+    QPushButton *nuevo_dificil;
     QPushButton *resolver;
     QPushButton *cerrar;
     //Espacios
@@ -29,8 +31,12 @@ VentanaPrincipal::VentanaPrincipal()
     espacioHorizontal = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
 
     //Botones
-    nuevo = new QPushButton(tr("&Nuevo Juego"));
-    nuevo->setShortcut(tr("n"));
+    nuevo_facil = new QPushButton(tr("&Facil"));
+    nuevo_facil->setShortcut(tr("f"));
+    nuevo_medio = new QPushButton(tr("&Medio"));
+    nuevo_medio->setShortcut(tr("m"));
+    nuevo_dificil = new QPushButton(tr("&Dificil"));
+    nuevo_dificil->setShortcut(tr("d"));
     resolver = new QPushButton(tr("&Resolver"));
     resolver->setShortcut(tr("r"));
     cerrar = new QPushButton(tr("Cerrar"));
@@ -46,13 +52,17 @@ VentanaPrincipal::VentanaPrincipal()
 
     //Tamaño botones
     #ifdef Q_WS_MAC
-      nuevo->setMaximumWidth(150);
+      nuevo_facil->setMaximumWidth(150);
+      nuevo_medio->setMaximumWidth(150);
+      nuevo_dificil->setMaximumWidth(150);
       cerrar->setMaximumWidth(150);
       comoJugar->setMaximumWidth(150);
       pause->setMaximumWidth(150);
       continuar->setMaximumWidth(150);
     #else
-      nuevo->setMaximumWidth(100);
+      nuevo_facil->setMaximumWidth(150);
+      nuevo_medio->setMaximumWidth(150);
+      nuevo_dificil->setMaximumWidth(150);
       cerrar->setMaximumWidth(100);
       comoJugar->setMaximumWidth(100);
       pause->setMaximumWidth(100);
@@ -61,11 +71,17 @@ VentanaPrincipal::VentanaPrincipal()
 
     //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
-    QObject::connect(nuevo,SIGNAL(clicked()),this,SLOT(NuevoJuego()));
+    QObject::connect(nuevo_facil,SIGNAL(clicked()),this,SLOT(NuevoJuegoFacil()));
+    QObject::connect(nuevo_medio,SIGNAL(clicked()),this,SLOT(NuevoJuegoMedio()));
+    QObject::connect(nuevo_dificil,SIGNAL(clicked()),this,SLOT(NuevoJuegoDificil()));
     QObject::connect(resolver,SIGNAL(clicked()),this,SLOT(Resolver()));
     //Botones pausa y continuar aparecen y desaparecen
-    QObject::connect(nuevo,SIGNAL(clicked()),continuar,SLOT(hide()));
-    QObject::connect(nuevo,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(nuevo_facil,SIGNAL(clicked()),continuar,SLOT(hide()));
+    QObject::connect(nuevo_facil,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(nuevo_medio,SIGNAL(clicked()),continuar,SLOT(hide()));
+    QObject::connect(nuevo_medio,SIGNAL(clicked()),pause,SLOT(show()));
+    QObject::connect(nuevo_dificil,SIGNAL(clicked()),continuar,SLOT(hide()));
+    QObject::connect(nuevo_dificil,SIGNAL(clicked()),pause,SLOT(show()));
 
     QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(MostrarAyuda()));
     QObject::connect(pause,SIGNAL(clicked()),comoJugar,SLOT(hide()));
@@ -78,7 +94,10 @@ VentanaPrincipal::VentanaPrincipal()
 
     //Ordenar layout y botones
     //Insertar botones
-    botonera->addWidget(nuevo);
+    botonera->addWidget(nuevo_facil);
+    botonera->addWidget(nuevo_medio);
+    botonera->addWidget(nuevo_dificil);
+    botonera->addSpacing(15);
     botonera->addWidget(resolver);
     botonera->addWidget(cerrar);
     botonera->addItem(espacioVertical);
@@ -116,7 +135,7 @@ VentanaPrincipal::VentanaPrincipal()
 void VentanaPrincipal::MostrarAyuda()
 {
     QLocale spanish(QLocale::Spanish, QLocale::Spain);
-    int dificultad = 8, fila, columna;
+    int dificultad = 5, fila, columna;
     static QString html;
     static QTextDocument *doc = new QTextDocument;
     html = this->controlador->pulsarAyuda();
@@ -164,8 +183,8 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
     //con la logica del programa
 }
 
-//SLOT Nuevo Juego
-void VentanaPrincipal::NuevoJuego()
+//Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
+void VentanaPrincipal::NuevoJuego(int level)
 {
     //Esto es una prueba
     this->controlador->pulsarNuevo();
@@ -194,7 +213,7 @@ void VentanaPrincipal::ColocarFichas()
     int fila,columna;
     //Comproba dificultad en el modelo para
     //definir tamaño del tablero
-    int dificultad = 8;
+    int dificultad = 5;
     for(fila=0;fila<dificultad;fila++)
         for(columna=0;columna<dificultad;columna++)
         {
@@ -291,4 +310,18 @@ void VentanaPrincipal::Resolver()
             }
         }
 
+}
+
+//SLot nuevo juegos facil,medio,dificil
+void VentanaPrincipal::NuevoJuegoFacil()
+{
+    NuevoJuego(1);
+}
+void VentanaPrincipal::NuevoJuegoMedio()
+{
+    NuevoJuego(2);
+}
+void VentanaPrincipal::NuevoJuegoDificil()
+{
+    NuevoJuego(3);
 }

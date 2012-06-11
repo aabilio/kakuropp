@@ -35,15 +35,17 @@ public:
     void ColocarFichas();
     void BorrarFichas();
     void PintarFichas(int,int);
-    
+    void NuevoJuego(int);
 signals:
     
 public slots:
     //Slot (Valor, fila, columna)
     void CambiarValor(int,int,int);
-    void NuevoJuego();
     void Resolver();
     void MostrarAyuda();
+    void NuevoJuegoFacil();
+    void NuevoJuegoMedio();
+    void NuevoJuegoDificil();
     //Slot dificulad (por ahora no)
     
 };
