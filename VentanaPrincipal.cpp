@@ -115,6 +115,7 @@ VentanaPrincipal::VentanaPrincipal()
 //SLOT mostrar ayuda
 void VentanaPrincipal::MostrarAyuda()
 {
+    QLocale spanish(QLocale::Spanish, QLocale::Spain);
     int dificultad = 8, fila, columna;
     static QString html;
     static QTextDocument *doc = new QTextDocument;
@@ -125,6 +126,7 @@ void VentanaPrincipal::MostrarAyuda()
     this->qtbrowser->setGeometry(1000, 1000, 400, 400);
     this->qtbrowser->setMinimumSize(this->principal->width()-200,this->principal->height()-100);
     this->qtbrowser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->qtbrowser->setLocale(spanish);
 
     //Al pulsar en la ayuda
     if (this->isayuda) //La ayuda ya en pantalla
