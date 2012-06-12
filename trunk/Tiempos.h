@@ -31,7 +31,7 @@ class Tiempos
 public:
     Tiempos();
     Tiempos(char *name, int level);
-    void setName(char *name);
+    void setName(const char *name);
     char * getName(void);
     void setLevel(int level);
     int getLevel(void);

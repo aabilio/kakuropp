@@ -504,10 +504,11 @@ void VentanaPrincipal::saveResults(void)
     qDebug() << "Voy a guardar --> Nombre: " << this->inputName->text() << " Nivel: " << this->controlador->juego.partida.getLevel() << " en  " << this->seconds << " segundos." << endl;
 
     QString qsname = this->inputName->text();
-    char name[25];
+    char *name = new char [qsname.length() +1];
+    strcpy(name,qsname.toLatin1().constData());
     //string sname = qsname.toStdString();
     //name = new char [sname.size()+1];
-    strcpy(name, (char *)qsname.toAscii().data());
+    //strcpy(name, (char *)qsname.toAscii().data());
     qDebug() << "Voy a guardar --> Nombre: " << name << " Nivel: " << this->controlador->juego.partida.getLevel() << " en  " << this->seconds << " segundos." << endl;
 
 
