@@ -6,8 +6,15 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QTextBrowser>
+#include <QTimer>
+#include <QTime>
+#include <QLCDNumber>
+#include <QLabel>
 
 #include "fichaventana.h"
+
+#define EXITO 0
+#define ERROR 1
 
 
 class Controlador;
@@ -22,10 +29,23 @@ class VentanaPrincipal : public QMainWindow
     QHBoxLayout *layoutPrincipal;
     QGridLayout *grid;
     QTextBrowser *qtbrowser;
+    //Otros botones
+    QPushButton *terminar;
+    QPushButton *resolver;
     //boton pause
     QPushButton *pause;
     QPushButton *continuar;
     QPushButton *comoJugar;
+
+    QLabel *finalMsg;
+
+    QLCDNumber *lcd;
+    QString lcdtext;
+    QTimer *timer;
+    QTime *time;
+    int seconds;
+    int totalSeconds;
+
     bool isayuda;
     //Tam: tamano del tablero dificil
     FichaVentana *fichas[TAM][TAM];
@@ -49,6 +69,7 @@ public slots:
     void JuegoTerminado();
     void slotcontinuar();
     void slotpause();
+    void showTime();
     //Slot dificulad (por ahora no)
     
 };
