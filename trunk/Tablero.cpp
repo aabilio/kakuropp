@@ -162,3 +162,36 @@ void Tablero::reiniciarFichas()
             fichas[fila][col].setSumaAbajo(0);
         }
 }
+
+bool Tablero::resolverTablero()
+{
+
+    int suma = 0;
+    for(int i=0; i<dificultad;i++)
+        for(int j=dificultad-1;j>=0;j--)
+        {
+            suma = suma+fichas[i][j].getValorUser();
+            if(fichas[i][j].getBloqueada())
+            {
+                qDebug () << fichas[i][j].getSumaDer() << " " << suma;
+                if(fichas[i][j].getSumaDer() !=suma && fichas[i][j].getSumaDer()!= 0)
+                    return false;
+                suma=0;
+            }
+
+        }
+    for(int i=0; i<dificultad;i++)
+        for(int j=dificultad-1;j>=0;j--)
+        {
+            suma = suma+fichas[j][i].getValorUser();
+            if(fichas[j][i].getBloqueada())
+            {
+                qDebug() << fichas[j][i].getSumaAbajo() << "  " << suma;
+                if(fichas[j][i].getSumaAbajo()!= suma && fichas[i][j].getSumaAbajo()!=0)
+                    return false;
+                suma=0;
+            }
+
+        }
+    return true;
+}
