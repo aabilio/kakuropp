@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 using namespace std;
 
@@ -23,7 +24,7 @@ typedef Registro * RegistroRef;
 class Tiempos
 {
     fstream file;
-    char *name;
+    char name[25];
     int time;
     int level;
 
