@@ -10,6 +10,7 @@
 #include <QTime>
 #include <QLCDNumber>
 #include <QLabel>
+#include <QLineEdit>
 
 #include "fichaventana.h"
 
@@ -37,7 +38,10 @@ class VentanaPrincipal : public QMainWindow
     QPushButton *continuar;
     QPushButton *comoJugar;
 
+    QLabel *msgInputName;
+    QLineEdit *inputName;
     QLabel *finalMsg;
+    QPushButton *save;
 
     QLCDNumber *lcd;
     QString lcdtext;
@@ -70,6 +74,7 @@ public slots:
     void slotcontinuar();
     void slotpause();
     void showTime();
+    void saveResults();
     //Slot dificulad (por ahora no)
     
 };

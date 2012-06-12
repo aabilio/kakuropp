@@ -23,7 +23,7 @@ typedef Registro * RegistroRef;
 class Tiempos
 {
     fstream file;
-    char name[MAX_NAME];
+    char *name;
     int time;
     int level;
 
@@ -32,6 +32,10 @@ public:
     Tiempos(char *name, int level);
     void setName(char *name);
     char * getName(void);
+    void setLevel(int level);
+    int getLevel(void);
+    void setTime(int seconds);
+    int getTime(void);
     void saveScores(void);
     RegistroRef loadScores(void);
 };

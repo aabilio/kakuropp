@@ -17,6 +17,8 @@ VentanaPrincipal::VentanaPrincipal()
     QSpacerItem *espacioVertical;
     QSpacerItem *espacioHorizontal;
 
+    QString playerName;
+
     //Instanciar timer:
     lcd = new QLCDNumber;
     lcd->setNumDigits(8);
@@ -35,6 +37,8 @@ VentanaPrincipal::VentanaPrincipal()
     //Instanciar controlador
     controlador = new Controlador(this);
     //Instanciacion de objetos
+    this->msgInputName = new QLabel(this);
+    this->inputName = new QLineEdit(this);
     principal = new QWidget(this);
     qtbrowser = new QTextBrowser(this);
     finalMsg = new QLabel(this);
@@ -65,6 +69,8 @@ VentanaPrincipal::VentanaPrincipal()
     continuar = new QPushButton(tr("&Continuar"));
     continuar->setShortcut(tr("p"));
     //resto de botones
+    this->save = new QPushButton(tr("&Guardar"));
+    this->save->setShortcut(tr("g"));
 
     //Tamaño botones
     #ifdef Q_WS_MAC
@@ -76,6 +82,9 @@ VentanaPrincipal::VentanaPrincipal()
       comoJugar->setMaximumWidth(150);
       pause->setMaximumWidth(150);
       continuar->setMaximumWidth(150);
+      msgInputName->setMaximumSize(150,20);
+      inputName->setMaximumSize(150,20);
+      lcd->setMaximumWidth(150);
     #else
       nuevo_facil->setMaximumWidth(100);
       nuevo_medio->setMaximumWidth(100);
@@ -85,6 +94,9 @@ VentanaPrincipal::VentanaPrincipal()
       comoJugar->setMaximumWidth(100);
       pause->setMaximumWidth(100);
       continuar->setMaximumWidth(100);
+      msgInputName->setMaximumSize(100,25);
+      inputName->setMaximumSize(100,25);
+      lcd->setMaximumWidth(100);
     #endif
 
     //Conectar timer:
@@ -126,6 +138,8 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(pause,SIGNAL(clicked()),this,SLOT(slotpause()));
     QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(slotpause()));
 
+    QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveResults()));
+
 
     //Ordenar layout y botones
     //Insertar botones
@@ -137,6 +151,10 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(terminar);
     botonera->addWidget(cerrar);
     botonera->addWidget(lcd);
+    botonera->addSpacing(15);
+    botonera->addWidget(this->msgInputName);
+    botonera->addWidget(inputName);
+    botonera->addWidget(this->save);
     botonera->addItem(espacioVertical);
     botonera->addWidget(comoJugar);
     botonera->addWidget(pause);
@@ -145,7 +163,9 @@ VentanaPrincipal::VentanaPrincipal()
     continuar->hide();
     resolver->hide();
     lcd->hide();
-
+    inputName->hide();
+    this->msgInputName->hide();
+    this->save->hide();
 
     //Insertar botonera
     layoutPrincipal->addLayout(botonera);
@@ -204,6 +224,11 @@ void VentanaPrincipal::JuegoTerminado()
           //Mostar Mensaje final:
           this->finalMsg->setText("<h1><font color='Blue'>ENHORABUENA!<br>HAS GANADO!</color></h1>");
           this->finalMsg->show();
+
+          this->msgInputName->setText("Introduce tu nombre");
+          this->msgInputName->show();
+          this->inputName->show();
+          this->save->show();
         break;
         case ERROR: //La solución proporcionada es mala
           qDebug() << "Mierda! he perdido! en " << this->totalSeconds << "segundos";
@@ -281,6 +306,10 @@ void VentanaPrincipal::NuevoJuego(int level)
     this->finalMsg->hide();
     this->qtbrowser->hide();
     this->comoJugar->show();
+    this->msgInputName->hide();
+    this->inputName->hide();
+    this->save->hide();
+
     this->isayuda = false;
 
     int tam_anterior = controlador->getLevel();
@@ -468,4 +497,21 @@ void VentanaPrincipal::showTime(void)
 
     QString text = newTime.toString("hh:mm:ss");
     lcd->display(text);
+}
+
+void VentanaPrincipal::saveResults(void)
+{
+    qDebug() << "Voy a guardar --> Nombre: " << this->inputName->text() << " Nivel: " << this->controlador->juego.partida.getLevel() << " en  " << this->seconds << " segundos." << endl;
+
+    QString qsname = this->inputName->text();
+    char *name;
+    string sname = qsname.toStdString();
+    name = new char [sname.size()+1];
+    strcpy(name, sname.c_str());
+
+    this->controlador->juego.tiempos->setName(name);
+    this->controlador->juego.tiempos->setLevel(this->controlador->juego.partida.getLevel());
+    this->controlador->juego.tiempos->setTime(this->seconds);
+
+    //this->controlador->juego.tiempos->saveScores();
 }
