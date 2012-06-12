@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <list>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ using namespace std;
 
 typedef struct
 {
-    char *nombre[MAX_NAME];
+    char nombre[MAX_NAME];
     int time;
     int level;
 } Registro;
@@ -28,6 +29,9 @@ class Tiempos
     int time;
     int level;
 
+    static int ComparerTime(Registro x, Registro y);
+    list <Registro> sortList(list <Registro> L);
+
 public:
     Tiempos();
     Tiempos(char *name, int level);
@@ -38,7 +42,7 @@ public:
     void setTime(int seconds);
     int getTime(void);
     void saveScores(void);
-    RegistroRef loadScores(void);
+    void loadScores(void);
 };
 
 #endif // TIEMPOS_H

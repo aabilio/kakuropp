@@ -47,22 +47,30 @@ void Tiempos::saveScores(void)
     this->file.close();
 }
 
-RegistroRef Tiempos::loadScores(void)
+void Tiempos::loadScores(void)
 {
-    char **tmp;
-    string line;
-    RegistroRef reg;
+    list <Registro> L;
+    list <Registro>::iterator elemento;
 
-    tmp = new char * [MAX_TAM];
-    for (int i=0; i<MAX_TAM; i++) tmp[i] = new char[MAX_TAM];
+    //Para recorrer:
+    //for (elemento=L.begin(); elemento != L.end(); ++elemento)
+    //  this->file << elemento->time << endl;
 
-    this->file.open(FILE, MODE);
+    //Para ordenar de mayor a menor:
+    //L.sort(this->ComparerTime);
 
-    reg = new Registro;
-    for (int i=0; getline(this->file, line); i++)
-    {
-        //reg->level = line.
-    }
+}
 
+int Tiempos::ComparerTime(Registro x, Registro y)
+{
+    if (x.time > y.time) return 1;
+    else if (x.time <= y.time) return 0;
+    //else if (x.time < y.time) return -1;
+}
+
+list <Registro> Tiempos::sortList(list <Registro> L)
+{
+    L.sort(this->ComparerTime);
+    return L;
 }
 
