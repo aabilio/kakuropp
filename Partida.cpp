@@ -28,14 +28,11 @@ int Partida::getLevel(void)
 
 bool Partida::comprobarSolucion(void)
 {
-    return EXITO;
     if(this->tablero->resolverTablero())
         return EXITO;
     else
         return ERROR;
 
-
-   // return EXITO;
 }
 
 

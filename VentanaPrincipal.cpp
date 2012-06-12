@@ -42,6 +42,7 @@ VentanaPrincipal::VentanaPrincipal()
     principal = new QWidget(this);
     qtbrowser = new QTextBrowser(this);
     finalMsg = new QLabel(this);
+    msgSaved = new QLabel(this);
     layoutPrincipal = new QHBoxLayout(principal);
     botonera = new QVBoxLayout();
     grid = new QGridLayout();
@@ -85,6 +86,7 @@ VentanaPrincipal::VentanaPrincipal()
       msgInputName->setMaximumSize(150,20);
       inputName->setMaximumSize(150,20);
       lcd->setMaximumWidth(150);
+      msgSaved->setMaximumSize(150,20);
     #else
       nuevo_facil->setMaximumWidth(100);
       nuevo_medio->setMaximumWidth(100);
@@ -97,6 +99,7 @@ VentanaPrincipal::VentanaPrincipal()
       msgInputName->setMaximumSize(100,25);
       inputName->setMaximumSize(100,25);
       lcd->setMaximumWidth(100);
+      msgSaved->setMaximumSize(100,25);
     #endif
 
     //Conectar timer:
@@ -140,7 +143,6 @@ VentanaPrincipal::VentanaPrincipal()
 
     QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveResults()));
 
-
     //Ordenar layout y botones
     //Insertar botones
     botonera->addWidget(nuevo_facil);
@@ -152,6 +154,7 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(cerrar);
     botonera->addWidget(lcd);
     botonera->addSpacing(15);
+    botonera->addWidget(this->msgSaved);
     botonera->addWidget(this->msgInputName);
     botonera->addWidget(inputName);
     botonera->addWidget(this->save);
@@ -159,6 +162,7 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(comoJugar);
     botonera->addWidget(pause);
     botonera->addWidget(continuar);
+    this->msgSaved->hide();
     terminar->hide();
     continuar->hide();
     resolver->hide();
@@ -308,6 +312,7 @@ void VentanaPrincipal::NuevoJuego(int level)
     this->comoJugar->show();
     this->msgInputName->hide();
     this->inputName->hide();
+    this->msgSaved->hide();
     this->save->hide();
 
     this->isayuda = false;
@@ -509,5 +514,10 @@ void VentanaPrincipal::saveResults(void)
     this->controlador->juego.tiempos->setLevel(this->controlador->juego.partida.getLevel());
     this->controlador->juego.tiempos->setTime(this->seconds);
     qDebug() << "Nombre: " << this->controlador->juego.tiempos->getName();
-    //this->controlador->juego.tiempos->saveScores();
+    this->controlador->juego.tiempos->saveScores();
+    this->msgInputName->hide();
+    this->inputName->hide();
+    this->save->hide();
+    this->msgSaved->setText("<font color='green'>Guardado</font>");
+    this->msgSaved->show();
 }
