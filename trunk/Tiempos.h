@@ -24,7 +24,7 @@ typedef Registro * RegistroRef;
 class Tiempos
 {
     fstream file;
-    char name[25];
+    char name[MAX_NAME];
     int time;
     int level;
 

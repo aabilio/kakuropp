@@ -10,7 +10,6 @@
 #include <QTime>
 #include <QLCDNumber>
 #include <QLabel>
-#include <QLineEdit>
 
 #include "fichaventana.h"
 
@@ -38,10 +37,12 @@ class VentanaPrincipal : public QMainWindow
     QPushButton *continuar;
     QPushButton *comoJugar;
 
+
     QLabel *msgInputName;
     QLineEdit *inputName;
     QLabel *finalMsg;
     QPushButton *save;
+    QLabel *msgSaved;
 
     QLCDNumber *lcd;
     QString lcdtext;
