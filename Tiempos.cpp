@@ -10,10 +10,10 @@ Tiempos::Tiempos(char *name, int l): level(l)
     sprintf(this->name, "%s", name);
 }
 
-void Tiempos::setName(char *name)
+void Tiempos::setName(const char *name)
 {
   //qDebug() << "Nombre recibido: " << name;
-    strcpy(this->name,name);
+    strncpy(this->name,name,24);
     //sprintf(this->name, "%s", name);
    // qDebug << "hola";
 }
