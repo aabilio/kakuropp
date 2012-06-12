@@ -168,6 +168,7 @@ bool Tablero::resolverTablero()
 {
 
     int suma = 0;
+    int valor;
     for(int i=0; i<dificultad;i++)
     {
         suma=0;
@@ -198,5 +199,23 @@ bool Tablero::resolverTablero()
 
         }
     }
+    for(int i=0;i<dificultad;i++)
+    {
+        for(int j=dificultad-1;j>=0;j--)
+        {
+            valor = fichas[i][j].getValorUser();
+            qDebug() << "Valor" << i << j << ":"<< valor;
+            if(!fichas[i][j].getBloqueada())
+            {
+                for(int k=j-1;k>=0 && !fichas[i][k].getBloqueada();k--)
+                {
+                    if(valor == fichas[i][k].getValorUser())
+                     return false;
+
+                }
+            }
+        }
+    }
+
     return true;
 }

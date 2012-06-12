@@ -20,7 +20,6 @@ bool Fichas::getBloqueada()
 }
 void Fichas::setValorUser(int _valor)
 {
-    qDebug() << "Valor: " << _valor;
     valor_user = _valor;
 }
 int Fichas::getValorUser()
