@@ -24,6 +24,7 @@ bool Tablero::generarTablero(int level)
     {
         for(int j=1;j<dificultad;j++)
         {
+            fichas[i][j].setValorUser(0);
             if(!fichas[i][j].getBloqueada())
             {
                 if(!colocarValor(i,j))
@@ -175,7 +176,6 @@ bool Tablero::resolverTablero()
             suma = suma+fichas[i][j].getValorUser();
             if(fichas[i][j].getBloqueada())
             {
-                qDebug () << fichas[i][j].getSumaDer() << "A" << suma;
                 if(fichas[i][j].getSumaDer() !=suma && fichas[i][j].getSumaDer()!= 0)
                     return false;
                 suma=0;
@@ -191,7 +191,6 @@ bool Tablero::resolverTablero()
             suma = suma+fichas[j][i].getValorUser();
             if(fichas[j][i].getBloqueada())
             {
-                qDebug() << fichas[j][i].getSumaAbajo() << "D" << suma;
                 if(fichas[j][i].getSumaAbajo()!= suma && fichas[i][j].getSumaAbajo()!=0)
                     return false;
                 suma=0;
