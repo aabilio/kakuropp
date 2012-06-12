@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QTextStream>
 #include <QTextDocument>
+#include <QtGui>
 #include "Controlador.h"
 
 VentanaPrincipal::VentanaPrincipal()
@@ -307,6 +308,8 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
+    //this->controlador->juego.tiempos->loadScores();
+
     this->finalMsg->hide();
     this->qtbrowser->hide();
     this->comoJugar->show();
