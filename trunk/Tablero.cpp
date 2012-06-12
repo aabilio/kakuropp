@@ -168,30 +168,36 @@ bool Tablero::resolverTablero()
 
     int suma = 0;
     for(int i=0; i<dificultad;i++)
+    {
+        suma=0;
         for(int j=dificultad-1;j>=0;j--)
         {
             suma = suma+fichas[i][j].getValorUser();
             if(fichas[i][j].getBloqueada())
             {
-                qDebug () << fichas[i][j].getSumaDer() << " " << suma;
+                qDebug () << fichas[i][j].getSumaDer() << "A" << suma;
                 if(fichas[i][j].getSumaDer() !=suma && fichas[i][j].getSumaDer()!= 0)
                     return false;
                 suma=0;
             }
 
         }
+    }
     for(int i=0; i<dificultad;i++)
+    {
+        suma = 0;
         for(int j=dificultad-1;j>=0;j--)
         {
             suma = suma+fichas[j][i].getValorUser();
             if(fichas[j][i].getBloqueada())
             {
-                qDebug() << fichas[j][i].getSumaAbajo() << "  " << suma;
+                qDebug() << fichas[j][i].getSumaAbajo() << "D" << suma;
                 if(fichas[j][i].getSumaAbajo()!= suma && fichas[i][j].getSumaAbajo()!=0)
                     return false;
                 suma=0;
             }
 
         }
+    }
     return true;
 }
