@@ -28,15 +28,13 @@ int Partida::getLevel(void)
 
 bool Partida::comprobarSolucion(void)
 {
-    //AQUI SE TIENE QUE COMPROBAR LA SOLUCIÓN DADA POR EL USUARIO Y DEVOLVER "EXITO" SI BIEN Y "ERROR" SI MAL!!
-
-    //Comprobar repeticiones en Filas de no bloqueadas:
-    /*for (int F=0; F<this->level; F++)
-      for (int C=0; C<this->level; C++)
-        if (this->tablero->fichas[F][C] )*/
+    if(this->tablero->resolverTablero())
+        return EXITO;
+    else
+        return ERROR;
 
 
-    return EXITO;
+   // return EXITO;
 }
 
 
