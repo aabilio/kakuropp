@@ -29,6 +29,7 @@ VentanaPrincipal::VentanaPrincipal()
     lcd->display(this->lcdtext);
     lcd->setStyleSheet("background-color: qlineargradient(spread:repeat, x1:0, y1:0.431818, x2:1, y2:0.437273, stop:0 rgba(151, 151, 151, 255), stop:1 rgba(124, 124, 124, 255));");
     lcd->setSegmentStyle(QLCDNumber::Outline);
+    lcd->setFrameStyle(QFrame::NoFrame);
 
 
     //Instanciar controlador
