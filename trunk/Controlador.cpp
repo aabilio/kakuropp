@@ -31,6 +31,10 @@ void Controlador::setLevel(int level)
 }
 void Controlador::setValorUser(int valor, int fila,int columna)
 {
-    qDebug() << "Fila-Columna:" << fila << "-" << columna << " ";
     this->juego.partida.tablero->fichas[fila][columna].setValorUser(valor);
+}
+
+bool Controlador::comprobarSolucion(void)
+{
+    return this->juego.partida.comprobarSolucion();
 }

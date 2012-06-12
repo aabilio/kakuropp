@@ -22,6 +22,7 @@ public:
     int getLevel(void);
     void setLevel(int level);
     void setValorUser(int,int,int);
+    bool comprobarSolucion(void);
 
 signals:
     

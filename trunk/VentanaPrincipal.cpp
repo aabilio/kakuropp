@@ -12,12 +12,23 @@ VentanaPrincipal::VentanaPrincipal()
     QPushButton *nuevo_facil;
     QPushButton *nuevo_medio;
     QPushButton *nuevo_dificil;
-    QPushButton *resolver;
-    QPushButton *terminar;
     QPushButton *cerrar;
     //Espacios
     QSpacerItem *espacioVertical;
     QSpacerItem *espacioHorizontal;
+
+    //Instanciar timer:
+    lcd = new QLCDNumber;
+    lcd->setNumDigits(8);
+    this->seconds = 0;
+    time = new QTime;
+    time->setHMS(0,0,0,0);
+    timer = new QTimer(this);
+
+    this->lcdtext = time->toString("hh:mm:ss");
+    lcd->display(this->lcdtext);
+    lcd->setStyleSheet("background-color: qlineargradient(spread:repeat, x1:0, y1:0.431818, x2:1, y2:0.437273, stop:0 rgba(151, 151, 151, 255), stop:1 rgba(124, 124, 124, 255));");
+    lcd->setSegmentStyle(QLCDNumber::Outline);
 
 
     //Instanciar controlador
@@ -25,6 +36,7 @@ VentanaPrincipal::VentanaPrincipal()
     //Instanciacion de objetos
     principal = new QWidget(this);
     qtbrowser = new QTextBrowser(this);
+    finalMsg = new QLabel(this);
     layoutPrincipal = new QHBoxLayout(principal);
     botonera = new QVBoxLayout();
     grid = new QGridLayout();
@@ -74,6 +86,9 @@ VentanaPrincipal::VentanaPrincipal()
       continuar->setMaximumWidth(100);
     #endif
 
+    //Conectar timer:
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
+
     //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
     QObject::connect(nuevo_facil,SIGNAL(clicked()),this,SLOT(NuevoJuegoFacil()));
@@ -109,6 +124,8 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(continuar,SIGNAL(clicked()),this,SLOT(slotcontinuar()));
     QObject::connect(pause,SIGNAL(clicked()),this,SLOT(slotpause()));
     QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(slotpause()));
+
+
     //Ordenar layout y botones
     //Insertar botones
     botonera->addWidget(nuevo_facil);
@@ -118,6 +135,7 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(resolver);
     botonera->addWidget(terminar);
     botonera->addWidget(cerrar);
+    botonera->addWidget(lcd);
     botonera->addItem(espacioVertical);
     botonera->addWidget(comoJugar);
     botonera->addWidget(pause);
@@ -125,13 +143,16 @@ VentanaPrincipal::VentanaPrincipal()
     terminar->hide();
     continuar->hide();
     resolver->hide();
+    lcd->hide();
 
 
     //Insertar botonera
     layoutPrincipal->addLayout(botonera);
     layoutPrincipal->addItem(espacioHorizontal);
     layoutPrincipal->addWidget(qtbrowser);
+    layoutPrincipal->addWidget(this->finalMsg);
     qtbrowser->hide();
+    this->finalMsg->hide();
 
     // Para juntarse los spinbox (te gusta?):
     grid->setHorizontalSpacing(0);
@@ -150,10 +171,51 @@ VentanaPrincipal::VentanaPrincipal()
     ColocarFichas();
 
 }
+
 //SLOT terminado
 void VentanaPrincipal::JuegoTerminado()
 {
-    //No hago nada
+    int dificultad = this->controlador->getLevel();
+
+    this->pause->hide();
+    this->continuar->hide();
+    this->comoJugar->hide();
+    this->terminar->hide();
+    //this->resolver->hide();
+
+    this->timer->stop();
+    this->totalSeconds = this->seconds;
+
+    this->finalMsg->setMinimumSize(this->principal->width()-200,this->principal->height()-100);
+    this->finalMsg->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //this->finalMsg->setTextFormat();
+
+    //Comprobar Resultado:
+    switch (this->controlador->comprobarSolucion())
+    {
+        case EXITO: //La solución proporcionada es buena
+          qDebug() << "Toma ya! he ganado! en " << this->totalSeconds << "segundos";
+          this->resolver->hide(); //No nos interesa resolver si hemos ganado
+          //Ocultar fichas:
+          for(int fila=0;fila<dificultad;fila++)
+              for(int columna=0;columna<dificultad;columna++)
+                this->fichas[fila][columna]->hide();
+          //Mostar Mensaje final:
+          this->finalMsg->setText("<h1><font color='Blue'>ENHORABUENA!<br>HAS GANADO!</color></h1>");
+          this->finalMsg->show();
+        break;
+        case ERROR: //La solución proporcionada es mala
+          qDebug() << "Mierda! he perdido! en " << this->totalSeconds << "segundos";
+          //Ocultar fichas:
+          for(int fila=0;fila<dificultad;fila++)
+              for(int columna=0;columna<dificultad;columna++)
+                this->fichas[fila][columna]->hide();
+          //Mostar Mensaje final:
+          this->finalMsg->setText("<h1><font color='Red'>LO SIENTO!<br>HAS PERDIDO!</color></h1>");
+          this->finalMsg->show();
+        break;
+    }
+
 }
 
 //SLOT mostrar ayuda
@@ -215,10 +277,13 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
+    this->finalMsg->hide();
     this->qtbrowser->hide();
     this->comoJugar->show();
     this->isayuda = false;
+
     int tam_anterior = controlador->getLevel();
+
     switch(level)
     {
         case 1:
@@ -231,7 +296,11 @@ void VentanaPrincipal::NuevoJuego(int level)
             controlador->setLevel(7);
             break;
     }
+
     this->controlador->pulsarNuevo();
+    this->seconds = 0;
+    this->lcd->show();
+    this->timer->start(1000);
     //Se borra tablero
     BorrarFichas(tam_anterior);
     //se inicia tablero
@@ -342,9 +411,18 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
 void VentanaPrincipal::Resolver()
 {
     int dificultad = controlador->getLevel();
+
+    this->finalMsg->hide(); //Ocultar mensaje final si es el caso de ver solución después de fallar
+    this->resolver->hide(); //No se puede volver a resolver (solo volver a jugar nueva partida)
+    this->lcd->hide(); //Tampoco interesa mostrar ya el timepo
+    this->terminar->hide();  //Ya no nos interesa terminar, por que hemos visto el resultado
+    this->comoJugar->hide(); //Ni ver las reglas
+    this->pause->hide(); //Ni pausar el juego
+
     for(int fila=0;fila<dificultad;fila++)
         for(int columna=0;columna<dificultad;columna++)
         {
+            this->fichas[fila][columna]->show(); //Volver a mostrar por si se ejecutó después de mostrar mensaje final
             if(!this->controlador->juego.partida.tablero->fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
             {
                 fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero->fichas[fila][columna].getValor());
@@ -357,12 +435,14 @@ void VentanaPrincipal::Resolver()
 void VentanaPrincipal::slotpause()
 {
     //Parar temporizador
+    this->timer->stop();
 }
 void VentanaPrincipal::slotcontinuar()
 {
     //continuar temporizador
     this->qtbrowser->hide();
     this->isayuda = false;
+    this->timer->start(1000);
 }
 
 //SLot nuevo juegos facil,medio,dificil
@@ -377,4 +457,14 @@ void VentanaPrincipal::NuevoJuegoMedio()
 void VentanaPrincipal::NuevoJuegoDificil()
 {
     NuevoJuego(3);
+}
+
+void VentanaPrincipal::showTime(void)
+{
+    QTime newTime;
+    seconds++;
+    newTime = time->addSecs(this->seconds);
+
+    QString text = newTime.toString("hh:mm:ss");
+    lcd->display(text);
 }
