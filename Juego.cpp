@@ -2,7 +2,7 @@
 
 Juego::Juego()
 {
-
+    this->tiempos = new Tiempos;
 }
 
 void Juego::nuevaPartida()
