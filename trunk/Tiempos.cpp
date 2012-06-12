@@ -2,7 +2,7 @@
 
 Tiempos::Tiempos()
 {
-    //this->name = new char [MAX_NAME];
+
 }
 
 Tiempos::Tiempos(char *name, int l): level(l)
@@ -12,18 +12,12 @@ Tiempos::Tiempos(char *name, int l): level(l)
 
 void Tiempos::setName(const char *name)
 {
-  //qDebug() << "Nombre recibido: " << name;
-    strncpy(this->name,name,24);
-    //sprintf(this->name, "%s", name);
-   // qDebug << "hola";
+    strncpy(this->name,name,MAX_NAME);
 }
 
 char * Tiempos::getName(void)
 {
-    //char *tmp;
-    //tmp = new char[MAX_NAME];
-    //sprintf(tmp, "%s", this->name);
-    return this->name; //tmp;
+    return this->name;
 }
 
 void Tiempos::setLevel(int level)
