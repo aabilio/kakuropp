@@ -593,6 +593,7 @@ void VentanaPrincipal::MostrarTiempos(void)
     //ATENCIÓN funciona bien! Solo que cambié el formato de archivo (por lo que no te funcionará con un archivo anterior)
     list<Registro> reg_tiempos = this->controlador->juego.tiempos->loadScores();
     list<Registro>::iterator elemento;
+    qDebug() << "devueltos numero de elemenos: " << reg_tiempos.size();
     /*
      REGISTRO:
         typedef struct
