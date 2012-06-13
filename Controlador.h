@@ -17,12 +17,9 @@ public:
     VentanaPrincipal *ventana;
     Juego juego;
 
-    void pulsarNuevo();
     string pulsarAyuda();
-    int getLevel(void);
-    void setLevel(int level);
-    void setValorUser(int,int,int);
-    bool comprobarSolucion(void);
+    void pulsarNuevo();
+
 
 signals:
     
