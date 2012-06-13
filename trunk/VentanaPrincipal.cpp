@@ -240,7 +240,7 @@ VentanaPrincipal::VentanaPrincipal()
 //SLOT terminado
 void VentanaPrincipal::JuegoTerminado()
 {
-    int dificultad = this->controlador->getLevel();
+    int dificultad = this->controlador->juego.getLevel();
 
     this->pause->hide();
     this->continuar->hide();
@@ -257,7 +257,7 @@ void VentanaPrincipal::JuegoTerminado()
     //this->finalMsg->setTextFormat();
 
     //Comprobar Resultado:
-    switch (this->controlador->comprobarSolucion())
+    switch (this->controlador->juego.comprobarSolucion())
     {
         case EXITO: //La solución proporcionada es buena
           qDebug() << "Toma ya! he ganado! en " << this->totalSeconds << "segundos";
@@ -293,7 +293,7 @@ void VentanaPrincipal::JuegoTerminado()
 void VentanaPrincipal::MostrarAyuda()
 {
     QLocale spanish(QLocale::Spanish, QLocale::Spain);
-    int dificultad = controlador->getLevel();
+    int dificultad = this->controlador->juego.getLevel();
     int fila, columna;
     static QString html;
     static QTextDocument *doc = new QTextDocument;
@@ -343,7 +343,7 @@ void VentanaPrincipal::MostrarAyuda()
 //SLOT cambiar valor
 void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 {
-    controlador->setValorUser(valor,fila,columna);
+    this->controlador->juego.setValorUser(valor, fila, columna);
 }
 
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
@@ -366,18 +366,18 @@ void VentanaPrincipal::NuevoJuego(int level)
     this->isayuda = false;
     this->istiempos = false;
 
-    int tam_anterior = controlador->getLevel();
+    int tam_anterior = this->controlador->juego.getLevel();
 
     switch(level)
     {
         case 1:
-            controlador->setLevel(5);
+            this->controlador->juego.setLevel(5);
             break;
         case 2:
-            controlador->setLevel(6);
+            this->controlador->juego.setLevel(6);
             break;
         case 3:
-            controlador->setLevel(7);
+            this->controlador->juego.setLevel(7);
             break;
     }
 
@@ -409,7 +409,7 @@ void VentanaPrincipal::ColocarFichas()
     int fila,columna;
     //Comproba dificultad en el modelo para
     //definir tamaño del tablero
-    int dificultad = controlador->getLevel();
+    int dificultad = this->controlador->juego.getLevel();
     for(fila=0;fila<dificultad;fila++)
         for(columna=0;columna<dificultad;columna++)
         {
@@ -447,7 +447,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
 
     //Comprobar el valor en el modelo
     //Esto hay que cambiarlo
-    if(!this->controlador->juego.partida.tablero->fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
+    if(!this->controlador->juego.getFichaBloqueada(fila, columna))/*Aqui hay que comprobar el valor */
     {
         fichas[fila][columna]->setRange(0,9);
         fichas[fila][columna]->setStyleSheet("background-color: rgb(211, 211, 211);");
@@ -462,23 +462,23 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
         //Esto hay que mejorarlo(con metodos)
         //Estos else if son para dibujar las sumas, hay que mejorarlo
         //falla algo
-        if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer()!= 0
-                && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo()!= 0)
+        if(this->controlador->juego.getFichaSumaDerecha(fila,columna) != 0
+                && this->controlador->juego.getFichaSumaAbajo(fila, columna) != 0 )
             #ifdef Q_WS_MAC
-              sprintf(cadena, "%d   %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
+              sprintf(cadena, "%d   %d",this->controlador->juego.getFichaSumaAbajo(fila, columna),this->controlador->juego.getFichaSumaDerecha(fila,columna));
             #else // Otros que no mac (windows por ejemplo):
-              sprintf(cadena, "%d  %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo(),this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
+              sprintf(cadena, "%d  %d",this->controlador->juego.getFichaSumaAbajo(fila, columna),this->controlador->juego.getFichaSumaDerecha(fila,columna));
             #endif
-        else if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer() == 0 &&
-                this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo() != 0)
+        else if(this->controlador->juego.getFichaSumaDerecha(fila,columna) == 0 &&
+                this->controlador->juego.getFichaSumaAbajo(fila, columna) != 0)
             #ifdef Q_WS_MAC
-              sprintf(cadena, "%d     ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
+              sprintf(cadena, "%d     ",this->controlador->juego.getFichaSumaAbajo(fila, columna));
             #else
-              sprintf(cadena, "%d    ",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo());
+              sprintf(cadena, "%d    ",this->controlador->juego.getFichaSumaAbajo(fila, columna));
             #endif
-        else if(this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaAbajo() == 0
-                && this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer() != 0)
-            sprintf(cadena, "    %d",this->controlador->juego.partida.tablero->fichas[fila][columna].getSumaDer());
+        else if(this->controlador->juego.getFichaSumaAbajo(fila, columna) == 0
+                && this->controlador->juego.getFichaSumaDerecha(fila,columna) != 0)
+            sprintf(cadena, "    %d",this->controlador->juego.getFichaSumaDerecha(fila,columna));
         else
         {
             sprintf(cadena,"   ");
@@ -494,7 +494,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
 
 void VentanaPrincipal::Resolver()
 {
-    int dificultad = controlador->getLevel();
+    int dificultad = this->controlador->juego.getLevel();
 
     this->finalMsg->hide(); //Ocultar mensaje final si es el caso de ver solución después de fallar
     this->resolver->hide(); //No se puede volver a resolver (solo volver a jugar nueva partida)
@@ -508,9 +508,9 @@ void VentanaPrincipal::Resolver()
         for(int columna=0;columna<dificultad;columna++)
         {
             this->fichas[fila][columna]->show(); //Volver a mostrar por si se ejecutó después de mostrar mensaje final
-            if(!this->controlador->juego.partida.tablero->fichas[fila][columna].getBloqueada())/*Aqui hay que comprobar el valor */
+            if(!this->controlador->juego.getFichaBloqueada(fila,columna))/*Aqui hay que comprobar el valor */
             {
-                fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero->fichas[fila][columna].getValor());
+                fichas[fila][columna]->setValue(this->controlador->juego.getFichaValor(fila, columna));
 
             }
         }
@@ -564,15 +564,15 @@ void VentanaPrincipal::showTime(void)
 
 void VentanaPrincipal::saveResults(void)
 {
-    qDebug() << "Voy a guardar --> Nombre: " << this->inputName->text() << " Nivel: " << this->controlador->juego.partida.getLevel() << " en  " << this->seconds << " segundos." << endl;
+    qDebug() << "Voy a guardar --> Nombre: " << this->inputName->text() << " Nivel: " << this->controlador->juego.getLevel() << " en  " << this->seconds << " segundos." << endl;
 
     //QString qsname =this->inputName->text();
 
-    this->controlador->juego.tiempos->setName(this->inputName->text().toLatin1().constData());
-    this->controlador->juego.tiempos->setLevel(this->controlador->juego.partida.getLevel());
-    this->controlador->juego.tiempos->setTime(this->seconds);
-    qDebug() << "Nombre: " << this->controlador->juego.tiempos->getName();
-    this->controlador->juego.tiempos->saveScores();
+    this->controlador->juego.setTiempoName(this->inputName->text().toLatin1().constData());
+    this->controlador->juego.setTiempoLevel(this->controlador->juego.getLevel());
+    this->controlador->juego.setTiempoTime(this->seconds);
+    qDebug() << "Nombre: " << this->controlador->juego.getTiempoName();
+    this->controlador->juego.saveScores();
     this->msgInputName->hide();
     this->inputName->hide();
     this->save->hide();
@@ -584,14 +584,14 @@ void VentanaPrincipal::saveResults(void)
 
 void VentanaPrincipal::MostrarTiempos(void)
 {
-    int dificultad = controlador->getLevel();
+    int dificultad = this->controlador->juego.getLevel();
     int fila, columna;
 
     QTime tiempo;
 
     //reg_tiempos es la lista con los tiempos ordenados por segundos de juego
     //ATENCIÓN funciona bien! Solo que cambié el formato de archivo (por lo que no te funcionará con un archivo anterior)
-    list<Registro> reg_tiempos = this->controlador->juego.tiempos->loadScores();
+    list<Registro> reg_tiempos = this->controlador->juego.loadScores();
     list<Registro>::iterator elemento;
     qDebug() << "devueltos numero de elemenos: " << reg_tiempos.size();
     /*

@@ -17,22 +17,3 @@ string Controlador::pulsarAyuda(void)
     //Comentario de siempre
     return html;
 }
-
-int Controlador::getLevel(void)
-{
-    return this->juego.partida.getLevel();
-}
-
-void Controlador::setLevel(int level)
-{
-    this->juego.partida.setLevel(level);
-}
-void Controlador::setValorUser(int valor, int fila,int columna)
-{
-    this->juego.partida.tablero->fichas[fila][columna].setValorUser(valor);
-}
-
-bool Controlador::comprobarSolucion(void)
-{
-    return this->juego.partida.comprobarSolucion();
-}
