@@ -42,7 +42,7 @@ bool Tablero::generarTablero(int level)
 bool Tablero::colocarBloqueadas()
 {
     //Generar numero de bloqueadas nuevas
-    int numbloqueadas = aleatorio(dificultad,dificultad+4);
+    int numbloqueadas = aleatorio(dificultad,dificultad+dificultad);
     for(int i = numbloqueadas; i>0; i--)
     {
         //Elegir lado y elemento
