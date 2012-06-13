@@ -1,24 +1,24 @@
 HEADERS += \
     Controlador.h \
     VentanaPrincipal.h \
-    Juego.h \
-    Ayuda.h \
-    Partida.h \
-    Tablero.h \
-    Tiempos.h \
-    Fichas.h \
+    kakuro/Juego.h \
+    kakuro/Ayuda.h \
+    kakuro/Partida.h \
+    kakuro/Tablero.h \
+    kakuro/Tiempos.h \
+    kakuro/Fichas.h \
     fichaventana.h
 
 SOURCES += \
     Controlador.cpp \
     VentanaPrincipal.cpp \
-    Juego.cpp \
+    kakuro/Juego.cpp \
     main.cpp \
-    Ayuda.cpp \
-    Partida.cpp \
-    Tablero.cpp \
-    Tiempos.cpp \
-    Fichas.cpp \
+    kakuro/Ayuda.cpp \
+    kakuro/Partida.cpp \
+    kakuro/Tablero.cpp \
+    kakuro/Tiempos.cpp \
+    kakuro/Fichas.cpp \
     fichaventana.cpp
 
 RC_FILE = app_icon.qrc
