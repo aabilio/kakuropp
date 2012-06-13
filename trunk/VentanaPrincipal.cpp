@@ -99,6 +99,7 @@ VentanaPrincipal::VentanaPrincipal()
     this->tiempos = new QPushButton(tr("&Tiempos"));
     this->tiempos->setShortcut(tr("t"));
     this->istiempos = false;
+    this->isIniciado = false;
 
     //Tamaño botones
     #ifdef Q_WS_MAC
@@ -242,6 +243,7 @@ void VentanaPrincipal::JuegoTerminado()
 {
     int dificultad = this->controlador->juego.getLevel();
 
+    this->isIniciado = false;
     this->pause->hide();
     this->continuar->hide();
     this->comoJugar->hide();
@@ -321,6 +323,8 @@ void VentanaPrincipal::MostrarAyuda()
         this->isayuda = false;
         pause->show();
         comoJugar->show();
+        this->terminar->show();
+        this->resolver->show();
         continuar->hide();
     }
     else //No hay ayuda en pantalla
@@ -334,6 +338,8 @@ void VentanaPrincipal::MostrarAyuda()
 
         this->isayuda = true;
         pause->hide();
+        this->terminar->hide();
+        this->resolver->hide();
         comoJugar->hide();
         this->tiempos->hide();
         continuar->show();
@@ -349,6 +355,7 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
+    this->isIniciado = true;
     this->showNormal();
     this->espacioHorizontal->changeSize(0,0);
     this->finalMsg->hide();
@@ -357,6 +364,8 @@ void VentanaPrincipal::NuevoJuego(int level)
     this->Highmedio->hide();
     this->Highdificil->hide();
     this->comoJugar->show();
+    this->terminar->show();
+    this->resolver->show();
     this->tiempos->show();
     this->msgInputName->hide();
     this->inputName->hide();
@@ -520,6 +529,8 @@ void VentanaPrincipal::Resolver()
 void VentanaPrincipal::slotpause()
 {
     //Parar temporizador
+    this->terminar->hide();
+    this->resolver->hide();
     this->timer->stop();
     this->espacioHorizontal->changeSize(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
 }
@@ -532,7 +543,13 @@ void VentanaPrincipal::slotcontinuar()
     this->Highdificil->hide();
     this->showNormal();
     this->espacioHorizontal->changeSize(0,0);
-    // !!!!!!!!! AQUÍ EL HIDE DEL NUEVO WIDGET DE TIEMPOS !!!!!!!!!
+    // !!!!!!!!! AQUÍ EL HIDE DEL NUEVO WIDGET DE TIEMPOS !!!!!!!!
+
+    if(isIniciado)
+    {
+        this->terminar->show();
+        this->resolver->show();
+    }
     this->isayuda = false;
     this->istiempos = false;
     this->timer->start(1000);
@@ -672,6 +689,8 @@ void VentanaPrincipal::MostrarTiempos(void)
         this->istiempos = true;
         this->comoJugar->hide();
         pause->hide();
+        terminar->hide();
+        resolver->hide();
         tiempos->hide();
         continuar->show();
     }

@@ -69,6 +69,7 @@ class VentanaPrincipal : public QMainWindow
 
     bool isayuda;
     bool istiempos;
+    bool isIniciado;
     //Tam: tamano del tablero dificil
     FichaVentana *fichas[TAM][TAM];
 
