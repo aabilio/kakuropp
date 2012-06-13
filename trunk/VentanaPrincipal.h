@@ -10,11 +10,14 @@
 #include <QTime>
 #include <QLCDNumber>
 #include <QLabel>
+#include <list>
 
 #include "fichaventana.h"
 
 #define EXITO 0
 #define ERROR 1
+
+#define MAX_NAME 32
 
 
 class Controlador;
@@ -42,6 +45,7 @@ class VentanaPrincipal : public QMainWindow
     QLineEdit *inputName;
     QLabel *finalMsg;
     QPushButton *save;
+    QPushButton *tiempos;
     QLabel *msgSaved;
 
     QLCDNumber *lcd;
@@ -52,6 +56,7 @@ class VentanaPrincipal : public QMainWindow
     int totalSeconds;
 
     bool isayuda;
+    bool istiempos;
     //Tam: tamano del tablero dificil
     FichaVentana *fichas[TAM][TAM];
 
@@ -76,8 +81,16 @@ public slots:
     void slotpause();
     void showTime();
     void saveResults();
+    void MostrarTiempos();
     //Slot dificulad (por ahora no)
     
 };
+
+//typedef struct
+//{
+//    char nombre[MAX_NAME];
+//    int time;
+//    int level;
+//} Registro;
 
 #endif // VENTANAPRINCIPAL_H

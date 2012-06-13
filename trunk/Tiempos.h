@@ -8,7 +8,8 @@
 
 using namespace std;
 
-#define FILE "tiempos.sav"
+#define FILENAME "tiempos.sav"
+#define DEBUG "debug.txt"
 #define MODE fstream::in | fstream::out | fstream::app | fstream::ate
 #define MAX_TAM 256
 #define MAX_NAME 32
@@ -42,7 +43,7 @@ public:
     void setTime(int seconds);
     int getTime(void);
     void saveScores(void);
-    void loadScores(void);
+    list<Registro> loadScores(void);
 };
 
 #endif // TIEMPOS_H
