@@ -564,6 +564,10 @@ void VentanaPrincipal::saveResults(void)
     this->save->hide();
     this->msgSaved->setText("<center><font color='green'>Guardado</font></center>");
     this->msgSaved->show();
+
+    this->finalMsg->hide();
+    this->MostrarTiempos();
+    this->continuar->hide();
 }
 
 void VentanaPrincipal::MostrarTiempos(void)
