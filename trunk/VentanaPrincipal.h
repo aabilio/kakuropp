@@ -63,6 +63,10 @@ class VentanaPrincipal : public QMainWindow
     int seconds;
     int totalSeconds;
 
+    //Espacios
+    QSpacerItem *espacioVertical;
+    QSpacerItem *espacioHorizontal;
+
     bool isayuda;
     bool istiempos;
     //Tam: tamano del tablero dificil

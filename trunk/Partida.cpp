@@ -2,7 +2,7 @@
 #include <QtGui>
 Partida::Partida()
 {
-    level = 5;
+    level = 7;
     tablero = new Tablero(this->level);
     tiempo = 0;
 }

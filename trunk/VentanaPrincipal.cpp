@@ -14,9 +14,6 @@ VentanaPrincipal::VentanaPrincipal()
     QPushButton *nuevo_medio;
     QPushButton *nuevo_dificil;
     QPushButton *cerrar;
-    //Espacios
-    QSpacerItem *espacioVertical;
-    QSpacerItem *espacioHorizontal;
 
     QString playerName;
 
@@ -48,7 +45,7 @@ VentanaPrincipal::VentanaPrincipal()
     botonera = new QVBoxLayout();
     grid = new QGridLayout();
     espacioVertical = new QSpacerItem(20,100,QSizePolicy::Minimum,QSizePolicy::Expanding);
-    espacioHorizontal = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
+    espacioHorizontal = new QSpacerItem(0,0/*,QSizePolicy::Expanding,QSizePolicy::Minimum*/);
     Highfacil = new QTableView(this);
     Modelfacil = new QStandardItemModel(20,2);
     Highmedio = new QTableView(this);
@@ -177,6 +174,7 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(tiempos,SIGNAL(clicked()),this,SLOT(slotpause()));
 
     QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveResults()));
+
 
     //Ordenar layout y botones
     //Insertar botones
@@ -337,6 +335,7 @@ void VentanaPrincipal::MostrarAyuda()
         this->isayuda = true;
         pause->hide();
         comoJugar->hide();
+        this->tiempos->hide();
         continuar->show();
     }
 }
@@ -520,6 +519,7 @@ void VentanaPrincipal::slotpause()
 {
     //Parar temporizador
     this->timer->stop();
+    this->espacioHorizontal->changeSize(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
 }
 void VentanaPrincipal::slotcontinuar()
 {
@@ -528,6 +528,8 @@ void VentanaPrincipal::slotcontinuar()
     this->Highfacil->hide();
     this->Highmedio->hide();
     this->Highdificil->hide();
+    this->showNormal();
+    this->espacioHorizontal->changeSize(0,0);
     // !!!!!!!!! AQUÍ EL HIDE DEL NUEVO WIDGET DE TIEMPOS !!!!!!!!!
     this->isayuda = false;
     this->istiempos = false;
@@ -652,10 +654,12 @@ void VentanaPrincipal::MostrarTiempos(void)
     }
     else //No están los tiempos en pantalla
     {
+        this->hide();
         //Esconder Fichas
         for(fila=0;fila<dificultad;fila++)
             for(columna=0;columna<dificultad;columna++)
               this->fichas[fila][columna]->hide();
+        this->showMaximized();
         //Mostrar ayuda:
         Highfacil->show();
         Highmedio->show();
