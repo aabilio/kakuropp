@@ -6,7 +6,7 @@
 using namespace std;
 
 #include "VentanaPrincipal.h"
-#include "Juego.h"
+#include "kakuro/Juego.h"
 
 class Controlador : public QObject
 {
