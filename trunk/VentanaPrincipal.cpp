@@ -583,6 +583,8 @@ void VentanaPrincipal::MostrarTiempos(void)
     int dificultad = controlador->getLevel();
     int fila, columna;
 
+    QTime tiempo;
+
     //reg_tiempos es la lista con los tiempos ordenados por segundos de juego
     //ATENCIÓN funciona bien! Solo que cambié el formato de archivo (por lo que no te funcionará con un archivo anterior)
     list<Registro> reg_tiempos = this->controlador->juego.tiempos->loadScores();
@@ -605,7 +607,9 @@ void VentanaPrincipal::MostrarTiempos(void)
     int contdificil = 0;
     for (elemento=reg_tiempos.begin(); elemento != reg_tiempos.end(); ++elemento)
      {
-        QTime tiempo = tiempo.addSecs(elemento->time);
+        tiempo.setHMS(0,0,0,0);
+        tiempo = tiempo.addSecs(elemento->time);
+        qDebug() << "segundos --> " << elemento->time << " || en horas --> " << tiempo.toString("hh:mm:ss");
         switch(elemento->level)
          {
                 case 5:
