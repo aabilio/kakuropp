@@ -54,7 +54,11 @@ list<Registro> Tiempos::loadScores(void)
     FILE *file = NULL;
     Registro tmp;
 
-    file = fopen(FILENAME, "r");
+    if ((file = fopen(FILENAME, "r")) == NULL)
+    {
+        return L;
+    }
+
     while(!feof(file))
     {
         fscanf(file, " %[^*] * %d * %d\n", tmp.nombre, &tmp.time, &tmp.level);
