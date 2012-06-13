@@ -42,23 +42,35 @@ int Tiempos::getTime(void)
 
 void Tiempos::saveScores(void)
 {
-    this->file.open(FILE, MODE);
-    this->file << this->name << ";" << this->time << ";" << this->level << endl;
+    this->file.open(FILENAME, MODE);
+    this->file << this->name << " * " << this->time << " * " << this->level << endl;
     this->file.close();
 }
 
-void Tiempos::loadScores(void)
+list<Registro> Tiempos::loadScores(void)
 {
     list <Registro> L;
     list <Registro>::iterator elemento;
+    FILE *file = NULL;
+    Registro tmp;
 
-    //Para recorrer:
+    file = fopen(FILENAME, "r");
+    while(!feof(file))
+    {
+        fscanf(file, " %[^*] * %d * %d\n", tmp.nombre, &tmp.time, &tmp.level);
+        L.push_front(tmp);
+    }
+    fclose(file);
+
+    L.sort(this->ComparerTime);
+
+
+    //this->file.open(DEBUG, MODE);
     //for (elemento=L.begin(); elemento != L.end(); ++elemento)
-    //  this->file << elemento->time << endl;
+    //  this->file << elemento->nombre << endl;
+    //this->file.close();
 
-    //Para ordenar de mayor a menor:
-    //L.sort(this->ComparerTime);
-
+    return L;
 }
 
 int Tiempos::ComparerTime(Registro x, Registro y)

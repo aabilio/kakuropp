@@ -73,6 +73,9 @@ VentanaPrincipal::VentanaPrincipal()
     //resto de botones
     this->save = new QPushButton(tr("&Guardar"));
     this->save->setShortcut(tr("g"));
+    this->tiempos = new QPushButton(tr("&Tiempos"));
+    this->tiempos->setShortcut(tr("t"));
+    this->istiempos = false;
 
     //Tamaño botones
     #ifdef Q_WS_MAC
@@ -134,6 +137,10 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(pause,SIGNAL(clicked()),comoJugar,SLOT(hide()));
     QObject::connect(continuar,SIGNAL(clicked()),comoJugar,SLOT(show()));
 
+    QObject::connect(tiempos,SIGNAL(clicked()),this,SLOT(MostrarTiempos()));
+    QObject::connect(pause,SIGNAL(clicked()),tiempos,SLOT(hide()));
+    QObject::connect(continuar,SIGNAL(clicked()),tiempos,SLOT(show()));
+
     QObject::connect(pause,SIGNAL(clicked()),continuar,SLOT(show()));
     QObject::connect(pause,SIGNAL(clicked()),pause,SLOT(hide()));
     QObject::connect(continuar,SIGNAL(clicked()),pause,SLOT(show()));
@@ -141,6 +148,7 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(continuar,SIGNAL(clicked()),this,SLOT(slotcontinuar()));
     QObject::connect(pause,SIGNAL(clicked()),this,SLOT(slotpause()));
     QObject::connect(comoJugar,SIGNAL(clicked()),this,SLOT(slotpause()));
+    QObject::connect(tiempos,SIGNAL(clicked()),this,SLOT(slotpause()));
 
     QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveResults()));
 
@@ -160,6 +168,7 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(inputName);
     botonera->addWidget(this->save);
     botonera->addItem(espacioVertical);
+    botonera->addWidget(this->tiempos);
     botonera->addWidget(comoJugar);
     botonera->addWidget(pause);
     botonera->addWidget(continuar);
@@ -207,6 +216,7 @@ void VentanaPrincipal::JuegoTerminado()
     this->continuar->hide();
     this->comoJugar->hide();
     this->terminar->hide();
+    this->tiempos->hide();
     //this->resolver->hide();
 
     this->timer->stop();
@@ -308,11 +318,10 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
-    //this->controlador->juego.tiempos->loadScores();
-
     this->finalMsg->hide();
     this->qtbrowser->hide();
     this->comoJugar->show();
+    this->tiempos->show();
     this->msgInputName->hide();
     this->inputName->hide();
     this->msgSaved->hide();
@@ -456,6 +465,7 @@ void VentanaPrincipal::Resolver()
     this->terminar->hide();  //Ya no nos interesa terminar, por que hemos visto el resultado
     this->comoJugar->hide(); //Ni ver las reglas
     this->pause->hide(); //Ni pausar el juego
+    this->tiempos->hide(); //Ni los tiempos
 
     for(int fila=0;fila<dificultad;fila++)
         for(int columna=0;columna<dificultad;columna++)
@@ -479,7 +489,9 @@ void VentanaPrincipal::slotcontinuar()
 {
     //continuar temporizador
     this->qtbrowser->hide();
+    // !!!!!!!!! AQUÍ EL HIDE DEL NUEVO WIDGET DE TIEMPOS !!!!!!!!!
     this->isayuda = false;
+    this->istiempos = false;
     this->timer->start(1000);
 }
 
@@ -523,4 +535,63 @@ void VentanaPrincipal::saveResults(void)
     this->save->hide();
     this->msgSaved->setText("<font color='green'>Guardado</font>");
     this->msgSaved->show();
+
+    //this->tiempos->show(); <-- Sería bonito, pero da problemas dificiles de resolver en corto plazo (sin rediseñar)
+}
+
+void VentanaPrincipal::MostrarTiempos(void)
+{
+    int dificultad = controlador->getLevel();
+    int fila, columna;
+
+    //reg_tiempos es la lista con los tiempos ordenados por segundos de juego
+    //ATENCIÓN funciona bien! Solo que cambié el formato de archivo (por lo que no te funcionará con un archivo anterior)
+    list<Registro> reg_tiempos = this->controlador->juego.tiempos->loadScores();
+    list<Registro>::iterator elemento;
+    /*
+     REGISTRO:
+        typedef struct
+        {
+            char nombre[MAX_NAME];
+            int time;
+            int level;
+        } Registro;
+
+      PARA RECORRER reg_tiempos:
+          for (elemento=reg_tiempos.begin(); elemento != reg_tiempos.end(); ++elemento)
+            qDebug() << elemento->nombre; // Por ejemplo
+    */
+
+    // !!!!!!!!!AQUÍ habra que formar el nuevo widget que contenga los datos de ref_tiempos!!!!!!!!
+
+    //Al pulsar en tiempos
+    if (this->istiempos) //Los tiempos ya en pantalla
+    {
+        //Esconder tiempos:
+        //!!!!!!!!!!!!!!AQUÍ IRA EL HIDE DEL NUEVO WIDGET!!!!!!!!!!
+        //Mostrar Fichas
+        for(fila=0;fila<dificultad;fila++)
+            for(columna=0;columna<dificultad;columna++)
+              this->fichas[fila][columna]->show();
+
+        this->istiempos = false;
+        pause->show();
+        this->tiempos->show();
+        continuar->hide();
+    }
+    else //No están los tiempos en pantalla
+    {
+        //Esconder Fichas
+        for(fila=0;fila<dificultad;fila++)
+            for(columna=0;columna<dificultad;columna++)
+              this->fichas[fila][columna]->hide();
+        //Mostrar ayuda:
+        //!!!!!!!!!!!!!AQUÍ IRÁ EL SHOW DEL NUEVO WIDGET!!!!!!!!!!!!!!!!
+
+        this->istiempos = true;
+        this->comoJugar->hide();
+        pause->hide();
+        tiempos->hide();
+        continuar->show();
+    }
 }
