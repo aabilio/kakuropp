@@ -186,6 +186,7 @@ VentanaPrincipal::VentanaPrincipal()
     botonera->addWidget(resolver);
     botonera->addWidget(terminar);
     botonera->addWidget(cerrar);
+    botonera->addSpacing(15);
     botonera->addWidget(lcd);
     botonera->addSpacing(15);
     botonera->addWidget(this->msgSaved);
