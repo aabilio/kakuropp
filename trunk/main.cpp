@@ -1,15 +1,18 @@
 #include <QApplication>
 #include <QHBoxLayout>
 
+
 #include "VentanaPrincipal.h"
 
 int main (int argc, char *argv[])
 {
     QApplication app(argc,argv);
 
-    VentanaPrincipal ventana;
+    app.setStyle("plastique");
 
-    //Mostrar ventena si puedo:
+    VentanaPrincipal ventana;
+    ventana.setGeometry(350,40,0,0);
+
     ventana.show();
 
     return app.exec();

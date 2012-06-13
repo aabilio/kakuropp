@@ -61,35 +61,35 @@ VentanaPrincipal::VentanaPrincipal()
     Modeldificil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
     Highdificil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
     Modelfacil->setHorizontalHeaderItem(0, new QStandardItem(QString("Nombre")));
-    Modelfacil->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo")));
+    Modelfacil->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo (fácil)")));
     Highfacil->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     Highfacil->setModel(Modelfacil);
     Modelmedio->setHorizontalHeaderItem(0, new QStandardItem(QString("Nombre")));
-    Modelmedio->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo")));
+    Modelmedio->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo (medio)")));
     Highmedio->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     Highmedio->setModel(Modelmedio);
     Modeldificil->setHorizontalHeaderItem(0, new QStandardItem(QString("Nombre")));
-    Modeldificil->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo")));
+    Modeldificil->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo (difícil)")));
     Highdificil->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     Highdificil->setModel(Modeldificil);
 
     //Botones
-    nuevo_facil = new QPushButton(tr("&Facil"));
+    nuevo_facil = new QPushButton(tr("&Fácil"));
     nuevo_facil->setShortcut(tr("f"));
     nuevo_medio = new QPushButton(tr("&Medio"));
     nuevo_medio->setShortcut(tr("m"));
-    nuevo_dificil = new QPushButton(tr("&Dificil"));
+    nuevo_dificil = new QPushButton(tr("&Difícil"));
     nuevo_dificil->setShortcut(tr("d"));
-    resolver = new QPushButton(tr("&Resolver"));
-    resolver->setShortcut(tr("r"));
-    terminar = new QPushButton(tr("&Terminar"));
-    terminar->setShortcut(tr("t"));
+    resolver = new QPushButton(tr("&Solución"));
+    resolver->setShortcut(tr("s"));
+    terminar = new QPushButton(tr("&Comprobar"));
+    terminar->setShortcut(tr("c"));
     cerrar = new QPushButton(tr("Cerrar"));
     cerrar->setShortcut(tr("Esc"));
     comoJugar = new QPushButton(tr("Reglas"));
     comoJugar->setShortcut(tr("?"));
     isayuda = false;
-    pause = new QPushButton(tr("&Pause"));
+    pause = new QPushButton(tr("&Pausa"));
     pause->setShortcut(tr("p"));
     continuar = new QPushButton(tr("&Continuar"));
     continuar->setShortcut(tr("p"));
@@ -349,6 +349,8 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
+    this->showNormal();
+    this->espacioHorizontal->changeSize(0,0);
     this->finalMsg->hide();
     this->qtbrowser->hide();
     this->Highfacil->hide();
