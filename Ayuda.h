@@ -1,16 +1,18 @@
 #ifndef AYUDA_H
 #define AYUDA_H
 
-#include <QTextStream>
+#include <string>
+
+using namespace std;
 
 class Ayuda
 {
-    QString helpTXT;
+    string helpTXT;
 public:
     Ayuda();
-    QString getAyuda();
-    void setAyuda(QString text);
-    QString getAyudaHtml(void);
+    string getAyuda();
+    void setAyuda(string text);
+    string getAyudaHtml(void);
 };
 
 #endif // AYUDA_H

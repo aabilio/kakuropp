@@ -1,5 +1,5 @@
-#include <QtGui>
-#include <QTextStream>
+#include <string>
+
 #include "Ayuda.h"
 
 Ayuda::Ayuda()
@@ -7,12 +7,12 @@ Ayuda::Ayuda()
     this->setAyuda("Nada");
 }
 
-QString Ayuda::getAyuda()
+string Ayuda::getAyuda()
 {
   return this->helpTXT;
 }
 
-void Ayuda::setAyuda(QString text)
+void Ayuda::setAyuda(string text)
 {
     this->helpTXT = "<html>"
                     "<head>"
@@ -34,7 +34,7 @@ void Ayuda::setAyuda(QString text)
                     "</html>";
 }
 
-QString Ayuda::getAyudaHtml()
+string Ayuda::getAyudaHtml()
 {
     this->setAyuda("None");
     return this->helpTXT;

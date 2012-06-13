@@ -297,7 +297,7 @@ void VentanaPrincipal::MostrarAyuda()
     int fila, columna;
     static QString html;
     static QTextDocument *doc = new QTextDocument;
-    html = this->controlador->pulsarAyuda();
+    html = QString::fromUtf8(this->controlador->pulsarAyuda().c_str());
     doc->setHtml(html);
     this->qtbrowser->setDocument(doc);
 

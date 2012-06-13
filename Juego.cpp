@@ -10,9 +10,9 @@ void Juego::nuevaPartida()
     this->partida.nuevoTablero();
 }
 
-QString Juego::mostrarAyuda()
+string Juego::mostrarAyuda()
 {
-    QString html;
+    string html;
     html = this->ayuda.getAyudaHtml();
 
     return html;
