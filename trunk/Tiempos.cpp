@@ -62,8 +62,8 @@ list<Registro> Tiempos::loadScores(void)
     }
     fclose(file);
 
-    L.sort(this->ComparerTime);
-
+    L.sort(this->ComparerTime); //Ordena de mayor a menor tiempo
+    L.reverse(); //Le da la vuelta a la lista, de menor a mayor
 
     //this->file.open(DEBUG, MODE);
     //for (elemento=L.begin(); elemento != L.end(); ++elemento)
