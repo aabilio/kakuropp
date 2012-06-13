@@ -11,6 +11,8 @@
 #include <QLCDNumber>
 #include <QLabel>
 #include <list>
+#include <QTableView>
+#include <QStandardItemModel>
 
 #include "fichaventana.h"
 
@@ -40,6 +42,12 @@ class VentanaPrincipal : public QMainWindow
     QPushButton *continuar;
     QPushButton *comoJugar;
 
+    QTableView *Highfacil;
+    QStandardItemModel *Modelfacil;
+    QStandardItemModel *Modelmedio;
+    QStandardItemModel *Modeldificil;
+    QTableView *Highmedio;
+    QTableView *Highdificil;
 
     QLabel *msgInputName;
     QLineEdit *inputName;

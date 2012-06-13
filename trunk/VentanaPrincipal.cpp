@@ -49,6 +49,32 @@ VentanaPrincipal::VentanaPrincipal()
     grid = new QGridLayout();
     espacioVertical = new QSpacerItem(20,100,QSizePolicy::Minimum,QSizePolicy::Expanding);
     espacioHorizontal = new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Minimum);
+    Highfacil = new QTableView(this);
+    Modelfacil = new QStandardItemModel(20,2);
+    Highmedio = new QTableView(this);
+    Modelmedio = new QStandardItemModel(20,2);
+    Highdificil = new QTableView(this);
+    Modeldificil = new QStandardItemModel(20,2);
+
+
+    Modelfacil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
+    Highfacil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
+    Modelmedio->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
+    Highmedio->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
+    Modeldificil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
+    Highdificil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
+    Modelfacil->setHorizontalHeaderItem(0, new QStandardItem(QString("Nombre")));
+    Modelfacil->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo")));
+    Highfacil->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    Highfacil->setModel(Modelfacil);
+    Modelmedio->setHorizontalHeaderItem(0, new QStandardItem(QString("Nombre")));
+    Modelmedio->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo")));
+    Highmedio->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    Highmedio->setModel(Modelmedio);
+    Modeldificil->setHorizontalHeaderItem(0, new QStandardItem(QString("Nombre")));
+    Modeldificil->setHorizontalHeaderItem(1, new QStandardItem(QString("Tiempo")));
+    Highdificil->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    Highdificil->setModel(Modeldificil);
 
     //Botones
     nuevo_facil = new QPushButton(tr("&Facil"));
@@ -186,6 +212,12 @@ VentanaPrincipal::VentanaPrincipal()
     layoutPrincipal->addItem(espacioHorizontal);
     layoutPrincipal->addWidget(qtbrowser);
     layoutPrincipal->addWidget(this->finalMsg);
+    layoutPrincipal->addWidget(Highfacil);
+    layoutPrincipal->addWidget(Highmedio);
+    layoutPrincipal->addWidget(Highdificil);
+    Highfacil->hide();
+    Highmedio->hide();
+    Highdificil->hide();
     qtbrowser->hide();
     this->finalMsg->hide();
 
@@ -320,6 +352,9 @@ void VentanaPrincipal::NuevoJuego(int level)
 {
     this->finalMsg->hide();
     this->qtbrowser->hide();
+    this->Highfacil->hide();
+    this->Highmedio->hide();
+    this->Highdificil->hide();
     this->comoJugar->show();
     this->tiempos->show();
     this->msgInputName->hide();
@@ -328,6 +363,7 @@ void VentanaPrincipal::NuevoJuego(int level)
     this->save->hide();
 
     this->isayuda = false;
+    this->istiempos = false;
 
     int tam_anterior = controlador->getLevel();
 
@@ -489,6 +525,9 @@ void VentanaPrincipal::slotcontinuar()
 {
     //continuar temporizador
     this->qtbrowser->hide();
+    this->Highfacil->hide();
+    this->Highmedio->hide();
+    this->Highdificil->hide();
     // !!!!!!!!! AQUÍ EL HIDE DEL NUEVO WIDGET DE TIEMPOS !!!!!!!!!
     this->isayuda = false;
     this->istiempos = false;
@@ -561,6 +600,31 @@ void VentanaPrincipal::MostrarTiempos(void)
           for (elemento=reg_tiempos.begin(); elemento != reg_tiempos.end(); ++elemento)
             qDebug() << elemento->nombre; // Por ejemplo
     */
+    int contfacil = 0;
+    int contmedio = 0;
+    int contdificil = 0;
+    for (elemento=reg_tiempos.begin(); elemento != reg_tiempos.end(); ++elemento)
+     {
+        QTime tiempo = tiempo.addSecs(elemento->time);
+        switch(elemento->level)
+         {
+                case 5:
+                    Modelfacil->setItem(contfacil, 0, new QStandardItem(QString::fromUtf8(elemento->nombre)));
+                    Modelfacil->setItem(contfacil, 1, new QStandardItem(tiempo.toString("hh:mm:ss")));
+                    contfacil++;
+                    break;
+                case 6:
+                    Modelmedio->setItem(contmedio, 0, new QStandardItem(QString::fromUtf8(elemento->nombre)));
+                    Modelmedio->setItem(contmedio, 1, new QStandardItem(tiempo.toString("hh:mm:ss")));
+                    contmedio++;
+                    break;
+                case 7:
+                    Modeldificil->setItem(contdificil, 0, new QStandardItem(QString::fromUtf8(elemento->nombre)));
+                    Modeldificil->setItem(contdificil, 1, new QStandardItem(tiempo.toString("hh:mm:ss")));
+                    contdificil++;
+                    break;
+        }
+    }
 
     // !!!!!!!!!AQUÍ habra que formar el nuevo widget que contenga los datos de ref_tiempos!!!!!!!!
 
@@ -568,6 +632,9 @@ void VentanaPrincipal::MostrarTiempos(void)
     if (this->istiempos) //Los tiempos ya en pantalla
     {
         //Esconder tiempos:
+        Highfacil->hide();
+        Highmedio->hide();
+        Highdificil->hide();
         //!!!!!!!!!!!!!!AQUÍ IRA EL HIDE DEL NUEVO WIDGET!!!!!!!!!!
         //Mostrar Fichas
         for(fila=0;fila<dificultad;fila++)
@@ -586,6 +653,9 @@ void VentanaPrincipal::MostrarTiempos(void)
             for(columna=0;columna<dificultad;columna++)
               this->fichas[fila][columna]->hide();
         //Mostrar ayuda:
+        Highfacil->show();
+        Highmedio->show();
+        Highdificil->show();
         //!!!!!!!!!!!!!AQUÍ IRÁ EL SHOW DEL NUEVO WIDGET!!!!!!!!!!!!!!!!
 
         this->istiempos = true;
