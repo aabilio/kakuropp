@@ -2,7 +2,6 @@
 #define PARTIDA_H
 
 #include "Tablero.h"
-#include "ctime"
 
 #define EXITO 0
 #define ERROR 1

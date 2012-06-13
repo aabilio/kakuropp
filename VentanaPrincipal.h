@@ -21,57 +21,68 @@
 
 #define MAX_NAME 32
 
-
 class Controlador;
 
 class VentanaPrincipal : public QMainWindow
 {
     Q_OBJECT
-    static const int TAM=9;
-    Controlador *controlador;
-    //Widget y objetos QT4
-    QWidget *principal;
-    QHBoxLayout *layoutPrincipal;
-    QGridLayout *grid;
-    QTextBrowser *qtbrowser;
-    //Otros botones
-    QPushButton *terminar;
-    QPushButton *resolver;
-    //boton pause
-    QPushButton *pause;
-    QPushButton *continuar;
-    QPushButton *comoJugar;
-
-    QTableView *Highfacil;
-    QStandardItemModel *Modelfacil;
-    QStandardItemModel *Modelmedio;
-    QStandardItemModel *Modeldificil;
-    QTableView *Highmedio;
-    QTableView *Highdificil;
-
-    QLabel *msgInputName;
-    QLineEdit *inputName;
-    QLabel *finalMsg;
-    QPushButton *save;
-    QPushButton *tiempos;
-    QLabel *msgSaved;
-
-    QLCDNumber *lcd;
-    QString lcdtext;
-    QTimer *timer;
-    QTime *time;
-    int seconds;
-    int totalSeconds;
-
-    //Espacios
-    QSpacerItem *espacioVertical;
-    QSpacerItem *espacioHorizontal;
 
     bool isayuda;
     bool istiempos;
     bool isIniciado;
-    //Tam: tamano del tablero dificil
+
+    int seconds;
+    int totalSeconds;
+    static const int TAM=9;
+
+    QString playerName;
+    QString lcdtext;
+
+    Controlador *controlador;
     FichaVentana *fichas[TAM][TAM];
+
+    //Widget y objetos QT4
+    QWidget *principal;
+
+    QHBoxLayout *layoutPrincipal;
+    QVBoxLayout *botonera;
+    QGridLayout *grid;
+
+    QSpacerItem *espacioVertical;
+    QSpacerItem *espacioHorizontal;
+
+    QPushButton *nuevo_facil;
+    QPushButton *nuevo_medio;
+    QPushButton *nuevo_dificil;
+    QPushButton *pause;
+    QPushButton *continuar;
+    QPushButton *comoJugar;
+    QPushButton *cerrar;
+    QPushButton *terminar;
+    QPushButton *resolver;
+    QPushButton *save;
+    QPushButton *tiempos;
+
+    QStandardItemModel *Modelfacil;
+    QStandardItemModel *Modelmedio;
+    QStandardItemModel *Modeldificil;
+
+    QTableView *Highfacil;
+    QTableView *Highmedio;
+    QTableView *Highdificil;
+
+    QLabel *msgInputName;
+    QLabel *finalMsg;
+    QLabel *msgSaved;
+
+    QLineEdit *inputName;
+
+    QTextBrowser *qtbrowser;
+
+    QLCDNumber *lcd;
+
+    QTimer *timer;
+    QTime *time;
 
 public:
     explicit VentanaPrincipal();
@@ -82,7 +93,6 @@ public:
 signals:
     
 public slots:
-    //Slot (Valor, fila, columna)
     void CambiarValor(int,int,int);
     void Resolver();
     void MostrarAyuda();
@@ -95,15 +105,6 @@ public slots:
     void showTime();
     void saveResults();
     void MostrarTiempos();
-    //Slot dificulad (por ahora no)
-    
 };
-
-//typedef struct
-//{
-//    char nombre[MAX_NAME];
-//    int time;
-//    int level;
-//} Registro;
 
 #endif // VENTANAPRINCIPAL_H

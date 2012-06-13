@@ -65,11 +65,6 @@ list<Registro> Tiempos::loadScores(void)
     L.sort(this->ComparerTime); //Ordena de mayor a menor tiempo
     L.reverse(); //Le da la vuelta a la lista, de menor a mayor
 
-    //this->file.open(DEBUG, MODE);
-    //for (elemento=L.begin(); elemento != L.end(); ++elemento)
-    //  this->file << elemento->nombre << endl;
-    //this->file.close();
-
     return L;
 }
 
@@ -77,7 +72,8 @@ int Tiempos::ComparerTime(Registro x, Registro y)
 {
     if (x.time > y.time) return 1;
     else if (x.time <= y.time) return 0;
-    //else if (x.time < y.time) return -1;
+
+    return -1;
 }
 
 list <Registro> Tiempos::sortList(list <Registro> L)

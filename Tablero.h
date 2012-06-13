@@ -4,6 +4,7 @@
 #include "Fichas.h"
 #include <cstdlib>
 #include <ctime>
+
 #define MAX 20
 
 class Tablero
