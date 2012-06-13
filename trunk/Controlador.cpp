@@ -14,6 +14,5 @@ string Controlador::pulsarAyuda(void)
 {
     string html;
     html = juego.mostrarAyuda();
-    //Comentario de siempre
     return html;
 }

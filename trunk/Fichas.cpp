@@ -1,5 +1,4 @@
 #include "Fichas.h"
-#include <QtGui>
 
 Fichas::Fichas()
 {

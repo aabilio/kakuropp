@@ -1,30 +1,21 @@
-#include "VentanaPrincipal.h"
 #include <QObject>
 #include <QTextStream>
 #include <QTextDocument>
 #include <QtGui>
+
+#include "VentanaPrincipal.h"
 #include "Controlador.h"
 
 VentanaPrincipal::VentanaPrincipal()
 {
-    //Definicion de Qobjetos locales
-    QVBoxLayout *botonera;
-    //Botones
-    QPushButton *nuevo_facil;
-    QPushButton *nuevo_medio;
-    QPushButton *nuevo_dificil;
-    QPushButton *cerrar;
-
-    QString playerName;
-
-    //Instanciar timer:
+    //Temporizadores:
     lcd = new QLCDNumber;
     lcd->setNumDigits(8);
     this->seconds = 0;
     time = new QTime;
     time->setHMS(0,0,0,0);
     timer = new QTimer(this);
-
+    //LCD de tiempo:
     this->lcdtext = time->toString("hh:mm:ss");
     lcd->display(this->lcdtext);
     lcd->setStyleSheet("background-color: qlineargradient(spread:repeat, x1:0, y1:0.431818, x2:1, y2:0.437273, stop:0 rgba(151, 151, 151, 255), stop:1 rgba(124, 124, 124, 255));");
@@ -53,7 +44,7 @@ VentanaPrincipal::VentanaPrincipal()
     Highdificil = new QTableView(this);
     Modeldificil = new QStandardItemModel(20,2);
 
-
+    //Opciones de tablas de Tiempos:
     Modelfacil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
     Highfacil->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
     Modelmedio->setProperty("editTriggers",QAbstractItemView::NoEditTriggers);
@@ -130,16 +121,13 @@ VentanaPrincipal::VentanaPrincipal()
       msgSaved->setMaximumSize(100,25);
     #endif
 
-    //Conectar timer:
+    //Conexiones entre botones:
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
-
-    //Conectar botones
     QObject::connect(cerrar,SIGNAL(clicked()),this,SLOT(close()));
     QObject::connect(nuevo_facil,SIGNAL(clicked()),this,SLOT(NuevoJuegoFacil()));
     QObject::connect(nuevo_medio,SIGNAL(clicked()),this,SLOT(NuevoJuegoMedio()));
     QObject::connect(nuevo_dificil,SIGNAL(clicked()),this,SLOT(NuevoJuegoDificil()));
     QObject::connect(resolver,SIGNAL(clicked()),this,SLOT(Resolver()));
-    //Botones pausa y continuar, terminar y resolver aparecen y desaparecen
     QObject::connect(terminar,SIGNAL(clicked()),this,SLOT(JuegoTerminado()));
         //Para boton facil
     QObject::connect(nuevo_facil,SIGNAL(clicked()),continuar,SLOT(hide()));
@@ -177,8 +165,7 @@ VentanaPrincipal::VentanaPrincipal()
     QObject::connect(save,SIGNAL(clicked()),this,SLOT(saveResults()));
 
 
-    //Ordenar layout y botones
-    //Insertar botones
+    //Colocar los botones:
     botonera->addWidget(nuevo_facil);
     botonera->addWidget(nuevo_medio);
     botonera->addWidget(nuevo_dificil);
@@ -207,7 +194,7 @@ VentanaPrincipal::VentanaPrincipal()
     this->msgInputName->hide();
     this->save->hide();
 
-    //Insertar botonera
+    //Cargar el Layout Principal con los Widgets
     layoutPrincipal->addLayout(botonera);
     layoutPrincipal->addItem(espacioHorizontal);
     layoutPrincipal->addWidget(qtbrowser);
@@ -221,7 +208,7 @@ VentanaPrincipal::VentanaPrincipal()
     qtbrowser->hide();
     this->finalMsg->hide();
 
-    // Para juntarse los spinbox (te gusta?):
+    //Juntado SpinBoxes
     grid->setHorizontalSpacing(0);
     grid->setVerticalSpacing(0);
 
@@ -231,12 +218,10 @@ VentanaPrincipal::VentanaPrincipal()
     //Conectar Widget principal
     setCentralWidget(principal);
 
-    //mostrar
     this->show();
 
     //Iniciar primer tablero
     ColocarFichas();
-
 }
 
 //SLOT terminado
@@ -250,27 +235,24 @@ void VentanaPrincipal::JuegoTerminado()
     this->comoJugar->hide();
     this->terminar->hide();
     this->tiempos->hide();
-    //this->resolver->hide();
 
     this->timer->stop();
     this->totalSeconds = this->seconds;
 
     this->finalMsg->setMinimumSize(this->principal->width()-200,this->principal->height()-100);
     this->finalMsg->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //this->finalMsg->setTextFormat();
 
     //Comprobar Resultado:
     switch (this->controlador->juego.comprobarSolucion())
     {
         case EXITO: //La solución proporcionada es buena
-          qDebug() << "Toma ya! he ganado! en " << this->totalSeconds << "segundos";
           this->resolver->hide(); //No nos interesa resolver si hemos ganado
           //Ocultar fichas:
           for(int fila=0;fila<dificultad;fila++)
               for(int columna=0;columna<dificultad;columna++)
                 this->fichas[fila][columna]->hide();
           //Mostar Mensaje final:
-          this->finalMsg->setText("<h1><font color='Blue'>ENHORABUENA!<br>HAS GANADO!</color></h1>");
+          this->finalMsg->setText("<center><h1><font color='Green'>ENHORABUENA!<br>HAS GANADO!</color></h1></center>");
           this->finalMsg->show();
 
           this->msgInputName->setText("Introduce tu nombre");
@@ -279,13 +261,12 @@ void VentanaPrincipal::JuegoTerminado()
           this->save->show();
         break;
         case ERROR: //La solución proporcionada es mala
-          qDebug() << "Mierda! he perdido! en " << this->totalSeconds << "segundos";
           //Ocultar fichas:
           for(int fila=0;fila<dificultad;fila++)
               for(int columna=0;columna<dificultad;columna++)
                 this->fichas[fila][columna]->hide();
           //Mostar Mensaje final:
-          this->finalMsg->setText("<h1><font color='Red'>LO SIENTO!<br>HAS PERDIDO!</color></h1>");
+          this->finalMsg->setText("<center><h1><font color='Red'>FAIL!<br>HAS PERDIDO!</color></h1></center>");
           this->finalMsg->show();
         break;
     }
@@ -295,19 +276,17 @@ void VentanaPrincipal::JuegoTerminado()
 //SLOT mostrar ayuda
 void VentanaPrincipal::MostrarAyuda()
 {
-    QLocale spanish(QLocale::Spanish, QLocale::Spain);
     int dificultad = this->controlador->juego.getLevel();
     int fila, columna;
+    QLocale spanish(QLocale::Spanish, QLocale::Spain);
     static QString html;
     static QTextDocument *doc = new QTextDocument;
     html = QString::fromUtf8(this->controlador->pulsarAyuda().c_str());
     doc->setHtml(html);
     this->qtbrowser->setDocument(doc);
 
-    //FIXME: mejorar el tamaño. El programa se cierra si dificultad < 8
-    //this->qtbrowser->setGeometry(1000, 1000, 400, 400);
+    //Opciones del contenedor de la ayuda
     this->qtbrowser->setMinimumSize(this->principal->width()-200,this->principal->height()-100);
-    //this->qtbrowser->setMinimumSize(200,200);
     this->qtbrowser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->qtbrowser->setLocale(spanish);
 
@@ -404,7 +383,6 @@ void VentanaPrincipal::NuevoJuego(int level)
 //metodo borrar fichas
 void VentanaPrincipal::BorrarFichas(int tam)
 {
-    //int tam = grid->columnCount(); //Cuento las columnas, col == filas
     for(int fila=0;fila<tam;fila++)
         for(int columna=0;columna<tam;columna++)
         {
@@ -413,12 +391,12 @@ void VentanaPrincipal::BorrarFichas(int tam)
         }
     grid->update();
 }
+
 //Metodo colocar fichas
 void VentanaPrincipal::ColocarFichas()
 {
     int fila,columna;
-    //Comproba dificultad en el modelo para
-    //definir tamaño del tablero
+
     int dificultad = this->controlador->juego.getLevel();
     for(fila=0;fila<dificultad;fila++)
         for(columna=0;columna<dificultad;columna++)
@@ -426,7 +404,7 @@ void VentanaPrincipal::ColocarFichas()
             //Instanciar y pintar dependiendo del valor
             fichas[fila][columna] = new FichaVentana(fila,columna);
             PintarFichas(fila,columna);
-            //añadir yconectar fichas
+            //añadir y conectar fichas
             grid->addWidget(fichas[fila][columna],fila,columna);
             QObject::connect(fichas[fila][columna],SIGNAL(valueChanged(int)),fichas[fila][columna],SLOT(recibir_valor(int)));
             QObject::connect(fichas[fila][columna],SIGNAL(completar_senal(int,int,int)),this,SLOT(CambiarValor(int,int,int)));
@@ -456,22 +434,18 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
     fichas[fila][columna]->setMinimumSize(80,80);
 
     //Comprobar el valor en el modelo
-    //Esto hay que cambiarlo
-    if(!this->controlador->juego.getFichaBloqueada(fila, columna))/*Aqui hay que comprobar el valor */
+    if(!this->controlador->juego.getFichaBloqueada(fila, columna))
     {
         fichas[fila][columna]->setRange(0,9);
         fichas[fila][columna]->setStyleSheet("background-color: rgb(211, 211, 211);");
         fichas[fila][columna]->setFont(noBloqueadas);
-        //fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero.fichas[fila][columna].getValor());
         fichas[fila][columna]->clear();
     }else
     {
         char cadena[8];
         fichas[fila][columna]->setRange(0,50);
         fichas[fila][columna]->setStyleSheet("background-color: qconicalgradient(cx:0.493318, cy:0.676, angle:327.6, stop:0.340909 rgba(192, 192, 192, 255), stop:0.346591 rgba(155, 155, 155, 255));");
-        //Esto hay que mejorarlo(con metodos)
-        //Estos else if son para dibujar las sumas, hay que mejorarlo
-        //falla algo
+
         if(this->controlador->juego.getFichaSumaDerecha(fila,columna) != 0
                 && this->controlador->juego.getFichaSumaAbajo(fila, columna) != 0 )
             #ifdef Q_WS_MAC
@@ -495,9 +469,7 @@ void VentanaPrincipal::PintarFichas(int fila,int columna)
             fichas[fila][columna]->setStyleSheet("background-color: qlineargradient(spread:repeat, x1:0, y1:0.431818, x2:1, y2:0.437273, stop:0 rgba(151, 151, 151, 255), stop:1 rgba(124, 124, 124, 255));");
         }
         fichas[fila][columna]->setSpecialValueText(cadena);
-       // fichas[fila][columna]->setValue(this->controlador->juego.partida.tablero.fichas[fila][columna].getSumaDer());//Comprobar en el modelo
         fichas[fila][columna]->setDisabled(TRUE);
-
         fichas[fila][columna]->setFont(bloqueadas);
     }
 }
@@ -518,7 +490,7 @@ void VentanaPrincipal::Resolver()
         for(int columna=0;columna<dificultad;columna++)
         {
             this->fichas[fila][columna]->show(); //Volver a mostrar por si se ejecutó después de mostrar mensaje final
-            if(!this->controlador->juego.getFichaBloqueada(fila,columna))/*Aqui hay que comprobar el valor */
+            if(!this->controlador->juego.getFichaBloqueada(fila,columna))
             {
                 fichas[fila][columna]->setValue(this->controlador->juego.getFichaValor(fila, columna));
 
@@ -526,10 +498,10 @@ void VentanaPrincipal::Resolver()
         }
 
 }
-//SLOt pausa y continuar
+
+//SLOT pausa y continuar
 void VentanaPrincipal::slotpause()
 {
-    //Parar temporizador
     this->terminar->hide();
     this->resolver->hide();
     this->timer->stop();
@@ -537,26 +509,25 @@ void VentanaPrincipal::slotpause()
 }
 void VentanaPrincipal::slotcontinuar()
 {
-    //continuar temporizador
     this->qtbrowser->hide();
     this->Highfacil->hide();
     this->Highmedio->hide();
     this->Highdificil->hide();
     this->showNormal();
     this->espacioHorizontal->changeSize(0,0);
-    // !!!!!!!!! AQUÍ EL HIDE DEL NUEVO WIDGET DE TIEMPOS !!!!!!!!
 
     if(isIniciado)
     {
         this->terminar->show();
         this->resolver->show();
     }
+
     this->isayuda = false;
     this->istiempos = false;
     this->timer->start(1000);
 }
 
-//SLot nuevo juegos facil,medio,dificil
+//SLOT's nuevo juegos facil,medio,dificil
 void VentanaPrincipal::NuevoJuegoFacil()
 {
     NuevoJuego(1);
@@ -582,22 +553,17 @@ void VentanaPrincipal::showTime(void)
 
 void VentanaPrincipal::saveResults(void)
 {
-    qDebug() << "Voy a guardar --> Nombre: " << this->inputName->text() << " Nivel: " << this->controlador->juego.getLevel() << " en  " << this->seconds << " segundos." << endl;
-
-    //QString qsname =this->inputName->text();
-
     this->controlador->juego.setTiempoName(this->inputName->text().toLatin1().constData());
     this->controlador->juego.setTiempoLevel(this->controlador->juego.getLevel());
     this->controlador->juego.setTiempoTime(this->seconds);
-    qDebug() << "Nombre: " << this->controlador->juego.getTiempoName();
+
     this->controlador->juego.saveScores();
+
     this->msgInputName->hide();
     this->inputName->hide();
     this->save->hide();
-    this->msgSaved->setText("<font color='green'>Guardado</font>");
+    this->msgSaved->setText("<center><font color='green'>Guardado</font></center>");
     this->msgSaved->show();
-
-    //this->tiempos->show(); <-- Sería bonito, pero da problemas dificiles de resolver en corto plazo (sin rediseñar)
 }
 
 void VentanaPrincipal::MostrarTiempos(void)
@@ -607,24 +573,9 @@ void VentanaPrincipal::MostrarTiempos(void)
 
     QTime tiempo;
 
-    //reg_tiempos es la lista con los tiempos ordenados por segundos de juego
-    //ATENCIÓN funciona bien! Solo que cambié el formato de archivo (por lo que no te funcionará con un archivo anterior)
     list<Registro> reg_tiempos = this->controlador->juego.loadScores();
     list<Registro>::iterator elemento;
-    qDebug() << "devueltos numero de elemenos: " << reg_tiempos.size();
-    /*
-     REGISTRO:
-        typedef struct
-        {
-            char nombre[MAX_NAME];
-            int time;
-            int level;
-        } Registro;
 
-      PARA RECORRER reg_tiempos:
-          for (elemento=reg_tiempos.begin(); elemento != reg_tiempos.end(); ++elemento)
-            qDebug() << elemento->nombre; // Por ejemplo
-    */
     int contfacil = 0;
     int contmedio = 0;
     int contdificil = 0;
@@ -632,7 +583,6 @@ void VentanaPrincipal::MostrarTiempos(void)
      {
         tiempo.setHMS(0,0,0,0);
         tiempo = tiempo.addSecs(elemento->time);
-        qDebug() << "segundos --> " << elemento->time << " || en horas --> " << tiempo.toString("hh:mm:ss");
         switch(elemento->level)
          {
                 case 5:
@@ -653,8 +603,6 @@ void VentanaPrincipal::MostrarTiempos(void)
         }
     }
 
-    // !!!!!!!!!AQUÍ habra que formar el nuevo widget que contenga los datos de ref_tiempos!!!!!!!!
-
     //Al pulsar en tiempos
     if (this->istiempos) //Los tiempos ya en pantalla
     {
@@ -662,7 +610,6 @@ void VentanaPrincipal::MostrarTiempos(void)
         Highfacil->hide();
         Highmedio->hide();
         Highdificil->hide();
-        //!!!!!!!!!!!!!!AQUÍ IRA EL HIDE DEL NUEVO WIDGET!!!!!!!!!!
         //Mostrar Fichas
         for(fila=0;fila<dificultad;fila++)
             for(columna=0;columna<dificultad;columna++)
@@ -685,7 +632,6 @@ void VentanaPrincipal::MostrarTiempos(void)
         Highfacil->show();
         Highmedio->show();
         Highdificil->show();
-        //!!!!!!!!!!!!!AQUÍ IRÁ EL SHOW DEL NUEVO WIDGET!!!!!!!!!!!!!!!!
 
         this->istiempos = true;
         this->comoJugar->hide();

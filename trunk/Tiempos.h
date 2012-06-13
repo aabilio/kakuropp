@@ -9,7 +9,6 @@
 using namespace std;
 
 #define FILENAME "tiempos.sav"
-#define DEBUG "debug.txt"
 #define MODE fstream::in | fstream::out | fstream::app | fstream::ate
 #define MAX_TAM 256
 #define MAX_NAME 32

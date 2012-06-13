@@ -1,5 +1,5 @@
 #include "Partida.h"
-#include <QtGui>
+
 Partida::Partida()
 {
     level = 7;

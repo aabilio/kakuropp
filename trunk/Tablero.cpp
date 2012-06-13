@@ -1,5 +1,4 @@
 #include "Tablero.h"
-#include <QtGui>
 
 Tablero::Tablero(int level)
 {
@@ -93,7 +92,7 @@ bool Tablero::colocarValor(int filaTope,int colTope)
     bool fallo = true;
     int dato;
     //contador de intentos
-    int cont =0;
+    int cont = 0;
     //Comentar funcion
     while(fallo)
     {
@@ -204,7 +203,6 @@ bool Tablero::resolverTablero()
         for(int j=dificultad-1;j>=0;j--)
         {
             valor = fichas[i][j].getValorUser();
-            qDebug() << "Valor" << i << j << ":"<< valor;
             if(!fichas[i][j].getBloqueada())
             {
                 for(int k=j-1;k>=0 && !fichas[i][k].getBloqueada();k--)
