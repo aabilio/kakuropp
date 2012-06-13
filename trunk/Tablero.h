@@ -7,10 +7,10 @@
 #define MAX 20
 
 class Tablero
-{public://borrar
-    Fichas fichas[MAX][MAX];
+{
     int dificultad;
 public:
+    Fichas fichas[MAX][MAX];
     Tablero(int);
     bool generarTablero(int);
     bool asignarValor();

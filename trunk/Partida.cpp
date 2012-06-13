@@ -4,7 +4,6 @@ Partida::Partida()
 {
     level = 7;
     tablero = new Tablero(this->level);
-    tiempo = 0;
 }
 
 void Partida::nuevoTablero()

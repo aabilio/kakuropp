@@ -10,11 +10,9 @@
 class Partida
 {
     int level;
-public://borrar
-    Tablero *tablero;
-    int tiempo;
 public:
     Partida();
+    Tablero *tablero;
     void nuevoTablero();
     void resolverPartida();
     bool comprobarSolucion();
