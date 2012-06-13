@@ -20,3 +20,5 @@ SOURCES += \
     Tiempos.cpp \
     Fichas.cpp \
     fichaventana.cpp
+
+RC_FILE = app_icon.qrc
