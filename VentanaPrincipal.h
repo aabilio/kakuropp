@@ -30,6 +30,7 @@ class VentanaPrincipal : public QMainWindow
     bool isayuda;
     bool istiempos;
     bool isIniciado;
+    bool afterWin;
 
     int seconds;
     int totalSeconds;
