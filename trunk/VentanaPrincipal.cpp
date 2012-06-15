@@ -259,6 +259,7 @@ void VentanaPrincipal::JuegoTerminado()
           this->msgInputName->show();
           this->inputName->show();
           this->save->show();
+          this->afterWin = true;
         break;
         case ERROR: //La solución proporcionada es mala
           //Ocultar fichas:
@@ -335,6 +336,7 @@ void VentanaPrincipal::CambiarValor(int valor,int fila,int columna)
 //Funcion Nuevo Juego 1(facil) 2(medio) 3(dificil)
 void VentanaPrincipal::NuevoJuego(int level)
 {
+    this->afterWin = false;
     this->isIniciado = true;
     this->showNormal();
     this->espacioHorizontal->changeSize(0,0);
@@ -524,7 +526,8 @@ void VentanaPrincipal::slotcontinuar()
 
     this->isayuda = false;
     this->istiempos = false;
-    this->timer->start(1000);
+
+    if(!this->afterWin) this->timer->start(1000);
 }
 
 //SLOT's nuevo juegos facil,medio,dificil
@@ -567,7 +570,7 @@ void VentanaPrincipal::saveResults(void)
 
     this->finalMsg->hide();
     this->MostrarTiempos();
-    this->continuar->hide();
+    this->continuar->show();
 }
 
 void VentanaPrincipal::MostrarTiempos(void)
